@@ -5,7 +5,7 @@
  * Generated linker script file for LPC1765
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * LPCXpresso v8.0.0 [Build 526] [2015-11-23]  on Jan 31, 2016 1:07:23 PM
+ * LPCXpresso v8.0.0 [Build 526] [2015-11-23]  on Feb 8, 2016 7:58:29 PM
  */
 
 INCLUDE "SRI_v1_LPC17xx_library.ld"

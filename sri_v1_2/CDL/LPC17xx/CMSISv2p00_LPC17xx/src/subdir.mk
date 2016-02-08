@@ -23,7 +23,7 @@ C_DEPS += \
 CMSISv2p00_LPC17xx/src/%.o: ../CMSISv2p00_LPC17xx/src/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU C Compiler'
-	arm-none-eabi-gcc -D__LPC17XX__ -D__REDLIB__ -D__CODE_RED -I"C:\Users\micke\Documents\LPCXpresso_8.0.0_526\workspace_sri1_1\CDL\CMSISv2p00_LPC17xx\inc" -I"C:\Users\micke\Documents\LPCXpresso_8.0.0_526\workspace_sri1_1\CDL\CMSISv2p00_LPC17xx\lpcinc" -I"C:\Users\micke\Documents\LPCXpresso_8.0.0_526\workspace_sri1_1\CDL\LPC17xxLib\inc" -O0 -g3 -Wall -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -mcpu=cortex-m3 -mthumb -D__REDLIB__ -specs=redlib.specs -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
+	arm-none-eabi-gcc -D__LPC17XX__ -D__REDLIB__ -D__CODE_RED -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\inc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\lpcinc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\LPC17xxLib\inc" -O0 -g3 -Wall -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -mcpu=cortex-m3 -mthumb -D__REDLIB__ -specs=redlib.specs -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
