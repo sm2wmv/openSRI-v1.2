@@ -7,7 +7,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "version.h"
-#include "../openSRI/SRI_v1/include/status.h"
+#include "../sri_v1_2/SRI_v1/include/status.h"
 
 void MainWindow::actionSerSRIPortTriggered() {
   dlgSelectPort->refreshPorts();
@@ -374,7 +374,27 @@ void MainWindow::updateUIfromSettings() {
   ui->spinBoxDisplayBacklightGreen->blockSignals(state);
   ui->spinBoxDisplayBacklightBlue->blockSignals(state);
   ui->lineEditDisplayTextCallsign->blockSignals(state);
-  //********* END CW SETTINGS *********//
+  //********* END MISC SETTINGS *********//
+
+  //********* START DIGITAL SETTINGS *********//
+  state = true;
+
+  ui->comboBoxDigitalFSKBaudrate->blockSignals(state);
+  ui->comboBoxDigitalFSKBitLength->blockSignals(state);
+  ui->comboBoxDigitalFSKParity->blockSignals(state);
+  ui->comboBoxDigitalFSKStopbits->blockSignals(state);
+
+  ui->comboBoxDigitalFSKBaudrate->setCurrentIndex(settings->getDigitalFSKBaudrate());
+  ui->comboBoxDigitalFSKBitLength->setCurrentIndex(settings->getDigitalFSKBitLength());
+  ui->comboBoxDigitalFSKParity->setCurrentIndex(settings->getDigitalFSKParity());
+  ui->comboBoxDigitalFSKStopbits->setCurrentIndex(settings->getDigitalFSKStopbits());
+
+  state = false;
+  ui->comboBoxDigitalFSKBaudrate->blockSignals(state);
+  ui->comboBoxDigitalFSKBitLength->blockSignals(state);
+  ui->comboBoxDigitalFSKParity->blockSignals(state);
+  ui->comboBoxDigitalFSKStopbits->blockSignals(state);
+  //********* END DIGITAL SETTINGS *********//
 
   //********* START WINKEY SETTINGS *********//
   state = true;
@@ -1290,11 +1310,26 @@ void MainWindow::checkBoxDebugClicked() {
   serialPort->addTXMessage(SRI_CMD_DEBUG_TEXT, debug_state);
 }
 
-void MainWindow::on_pushButtonDebugClearWindow_clicked()
-{
+void MainWindow::on_pushButtonDebugClearWindow_clicked() {
     ui->textEditDebug->clear();
 }
 
 void MainWindow::on_checkBoxDebugLogToFile_clicked(bool checked) {
 
+}
+
+void MainWindow::on_comboBoxDigitalFSKBaudrate_currentIndexChanged(int index) {
+  settings->setDigitalFSKBaudrate(index);
+}
+
+void MainWindow::on_comboBoxDigitalFSKBitLength_currentIndexChanged(int index) {
+  settings->setDigitalFSKBitLength(index);
+}
+
+void MainWindow::on_comboBoxDigitalFSKStopbits_currentIndexChanged(int index) {
+  settings->setDigitalFSKStopbits(index);
+}
+
+void MainWindow::on_comboBoxDigitalFSKParity_currentIndexChanged(int index) {
+  settings->setDigitalFSKParity(index);
 }

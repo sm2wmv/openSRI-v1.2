@@ -45,14 +45,6 @@ uint8_t sc16is7x0_read_reg(uint8_t reg) {
   return(rx_data[0]);
 }
 
-uint8_t sc16is7x0_set_baudrate(void) {
-  PRINTF("SC16IS740 RETVAL: %i\n",sc16is7x0_set_reg(SC16IS7X0_LCR, 0x80));
-  sc16is7x0_set_reg(SC16IS7X0_DLL, 0x00);
-  sc16is7x0_set_reg(SC16IS7X0_DLH, 0x03);
-
-  return(0);
-}
-
 uint8_t sc16is7x0_uart_connected(void) {
   //Test to set the temporary register and read the result to see if
   //the UART is connected
@@ -64,8 +56,49 @@ uint8_t sc16is7x0_uart_connected(void) {
   return(0);
 }
 
-uint8_t sc16is7x0_init(void) {
-  sc16is7x0_set_baudrate();
+uint8_t sc16is7x0_init_fsk(uint16_t baudrate_divisor, uint8_t parity, uint8_t stopbits, uint8_t bitlength) {
+  uint8_t reg = 0;
+
+  //Setting baudrate for FSK
+  sc16is7x0_set_reg(SC16IS7X0_LCR, 0x80);
+  sc16is7x0_set_reg(SC16IS7X0_DLL, baudrate_divisor & 0xFF);
+  sc16is7x0_set_reg(SC16IS7X0_DLH, (baudrate_divisor >> 8) & 0xFF);
+
+  //Setup the parity
+  if (parity == SETTING_DIGITAL_PARITY_EVEN)
+    reg |= (1<<3) | (1<<4);
+  else if (parity == SETTING_DIGITAL_PARITY_ODD)
+    reg |= (1<<3);
+
+  //Set the stopbits
+  if (stopbits == SETTING_DIGITAL_STOPBITS_1_5)
+    reg |= (1<<2);
+  else if (stopbits == SETTING_DIGITAL_STOPBITS_2)
+    reg |= (1<<2);
+
+  if (bitlength == 6)
+    reg |= (1<<0);
+  else if (bitlength == 7)
+    reg |= (1<<1);
+  else if (bitlength == 8)
+    reg |= (1<<1) | (1<<0);
+
+  //Set the LCR register for FSK
+  sc16is7x0_set_reg(SC16IS7X0_LCR, reg);
+  //Set the TX and RX FIFO
+  sc16is7x0_set_reg(SC16IS7X0_FCR, 0x06);
+  //Enable the FIFO
+  sc16is7x0_set_reg(SC16IS7X0_FCR, 0x01);
+
+  return(0);
+}
+
+uint8_t sc16is7x0_init_winkey(void) {
+  //Setup the baudrate to 1200 baud for Winkey
+  sc16is7x0_set_reg(SC16IS7X0_LCR, 0x80);
+  sc16is7x0_set_reg(SC16IS7X0_DLL, 0x00);
+  sc16is7x0_set_reg(SC16IS7X0_DLH, 0x03);
+
   sc16is7x0_set_reg(SC16IS7X0_LCR, 0x03);
   sc16is7x0_set_reg(SC16IS7X0_FCR, 0x06);
   sc16is7x0_set_reg(SC16IS7X0_FCR, 0x01);

@@ -176,6 +176,11 @@ void settings_set_default_settings(void) {
   strcpy((char *)settings.display_digital.text[1], "Mode: %s");
   strcpy((char *)settings.display_digital.text[2], "Call: %s");
   strcpy((char *)settings.display_digital.text[3], "Mode: %s");
+
+  settings.digital.baudrate_divisor = 20277;  //Set for 45.45 baud
+  settings.digital.bitlength = 5;
+  settings.digital.stopbits = SETTING_DIGITAL_STOPBITS_1_5;
+  settings.digital.parity = SETTING_DIGITAL_PARITY_NONE;
 }
 
 /********** START SET RADIO SETTINGS **********/
@@ -538,6 +543,45 @@ uint8_t settings_get_cw_input_source(void) {
 }
 /********** END GET CW SETTINGS **********/
 
+/********** START GET DIGITAL SETTINGS **********/
+uint16_t settings_get_digital_baudrate_divisor() {
+  return(settings.digital.baudrate_divisor);
+}
+
+uint8_t settings_get_digital_parity(void) {
+  return(settings.digital.parity);
+}
+
+uint8_t settings_get_digital_stopbits(void) {
+  return(settings.digital.stopbits);
+}
+
+uint8_t settings_get_digital_bitlength(void) {
+  return(settings.digital.bitlength);
+}
+/********** END GET DIGITAL SETTINGS **********/
+
+/********** START SET DIGITAL SETTINGS **********/
+void settings_set_digital_baudrate_divisor(uint16_t baudrate_divisor) {
+  settings.digital.baudrate_divisor = baudrate_divisor;
+  SETTINGS_UPDATE_TO_COMPUTER(settings.digital.baudrate_divisor);
+}
+
+void settings_set_digital_parity(uint8_t parity) {
+  settings.digital.parity = parity;
+  SETTINGS_UPDATE_TO_COMPUTER(settings.digital.parity);
+}
+
+void settings_set_digital_stopbits(uint8_t stopbits) {
+  settings.digital.stopbits = stopbits;
+  SETTINGS_UPDATE_TO_COMPUTER(settings.digital.stopbits);
+}
+
+void settings_set_digital_bitlength(uint8_t bitlength) {
+  settings.digital.bitlength = bitlength;
+  SETTINGS_UPDATE_TO_COMPUTER(settings.digital.bitlength);
+}
+/********** START SET DIGITAL SETTINGS **********/
 
 /********** START SET MISC SETTINGS **********/
 void settings_set_backlight_rgb(uint8_t red, uint8_t green, uint8_t blue) {

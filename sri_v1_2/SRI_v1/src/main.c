@@ -210,7 +210,7 @@ int main (void) {
 
   ctrl_backlight_init(settings_get_backlight_rgb_red(), settings_get_backlight_rgb_green(), settings_get_backlight_rgb_blue());
 
-  sc16is7x0_init();
+  sc16is7x0_init_winkey();
 
   //status.curr_button_state = ctrl_buttons_get_status();
   flags.various = 0;

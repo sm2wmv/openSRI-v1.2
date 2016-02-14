@@ -39,6 +39,7 @@ void computer_interface_uart_rx(struct_comm_interface_msg message) {
     SETTINGS_UPDATE_TO_COMPUTER(settings.display_cw);
     SETTINGS_UPDATE_TO_COMPUTER(settings.display_phone);
     SETTINGS_UPDATE_TO_COMPUTER(settings.display_digital);
+    SETTINGS_UPDATE_TO_COMPUTER(settings.digital);
 
     settings_send_cw_messages();
 

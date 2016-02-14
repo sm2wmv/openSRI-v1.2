@@ -1,6 +1,6 @@
 #include "misc.h"
 #include "commands.h"
-#include "../openSRI/SRI_v1/include/status.h"
+#include "../sri_v1_2/SRI_v1/include/status.h"
 
 Misc::Misc() {
 }

@@ -27,6 +27,24 @@ Settings::Settings() {
     settings.audio.mic_mute[i] = 0;
     settings.audio.mic_preamp[i] = 0;
   }
+
+  //14745600 Hz / (16*baudrate (bps))
+  digitalFSKBaudrate[0] = 41891;
+  digitalFSKBaudrate[1] = 20480;
+  digitalFSKBaudrate[2] = 20277;
+  digitalFSKBaudrate[3] = 18432;
+  digitalFSKBaudrate[4] = 16457;
+  digitalFSKBaudrate[5] = 12288;
+  digitalFSKBaudrate[6] = 9216;
+  digitalFSKBaudrate[7] = 8378;
+  digitalFSKBaudrate[8] = 6144;
+  digitalFSKBaudrate[9] = 4608;
+  digitalFSKBaudrate[10] = 3072;
+
+  settings.digital.baudrate_divisor = digitalFSKBaudrate[2];
+  settings.digital.bitlength = 5;
+  settings.digital.stopbits = 1;
+  settings.digital.parity = 0;
 }
 
 void Settings::setSerialPtr(CommClass *ptr) {
@@ -518,11 +536,51 @@ QString Settings::getCallsign() {
 
   return(str);
 }
-
 /*********** STOP MISC SETTINGS ***********/
 
-/*********** START WINKEY SETTINGS ***********/
+/*********** START Digital SETTINGS ***********/
+void Settings::setDigitalFSKBaudrate(quint8 index) {
+  settings.digital.baudrate_divisor = digitalFSKBaudrate[index];
+  UPDATE_TO_DEVICE(settings.digital.baudrate_divisor);
+}
 
+void Settings::setDigitalFSKStopbits(quint8 index) {
+  settings.digital.stopbits = index;
+  UPDATE_TO_DEVICE(settings.digital.stopbits);
+}
+
+void Settings::setDigitalFSKBitLength(quint8 index) {
+  settings.digital.bitlength = index+5;
+  UPDATE_TO_DEVICE(settings.digital.bitlength);
+}
+
+void Settings::setDigitalFSKParity(quint8 index) {
+  settings.digital.parity = index;
+  UPDATE_TO_DEVICE(settings.digital.parity);
+}
+
+quint8 Settings::getDigitalFSKBaudrate() {
+  for (quint8 i=0;i<sizeof(digitalFSKBaudrate);i++)
+    if (digitalFSKBaudrate[i] == settings.digital.baudrate_divisor)
+      return(i);
+
+  return(2);
+}
+
+quint8 Settings::getDigitalFSKStopbits() {
+  return(settings.digital.stopbits);
+}
+
+quint8 Settings::getDigitalFSKBitLength() {
+  return(settings.digital.bitlength-5);
+}
+
+quint8 Settings::getDigitalFSKParity() {
+  return(settings.digital.parity);
+}
+/*********** STOP Digital SETTINGS ***********/
+
+/*********** START WINKEY SETTINGS ***********/
 void Settings::setWinkeyKeyerMode(quint8 value) {
   //Clear the data
   settings.winkey.modereg &= ~(1<<5);

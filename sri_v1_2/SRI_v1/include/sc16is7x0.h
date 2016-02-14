@@ -65,17 +65,23 @@
 //! Enhanced Feature Register (EFR) - Only accessible when LCR = 0xBF
 #define SC16IS7X0_EFR     0x02 << 3
 
-/*! \brief Initialize the chip
- *  \param addr The chips I2C address
+/*! \brief Initialize the chip for 1200 baud (Winkey)
  *  \return 1 if the device failed, 0 if not */
-uint8_t sc16is7x0_init(void);
+uint8_t sc16is7x0_init_winkey(void);
+
+/*! \brief Initialize the chip for FSK, set baudrate
+ *  \param The divisor for the baudrate, (14745600 / (baudrate * 16))
+ *  \param Parity settings, 0 = None, 1 = Even, 2 = Odd
+ *  \param Stopbits, 0 = 1 bit, 1 = 1.5 bit, 2 = 2 bits
+ *  \param Bitlength, The number of bits
+ *  \return 1 if the device failed, 0 if not */
+uint8_t sc16is7x0_init_fsk(uint16_t baudrate_divisor, uint8_t parity, uint8_t stopbits, uint8_t bitlength);
 
 /*! \brief This function should be called each ms */
 void sc16is7x0_1ms_tick(void);
 
 void sc16is7x0_write_char(uint8_t data);
 void sc16is7x0_write_data(uint8_t length, uint8_t *data);
-uint8_t sc16is7x0_set_baudrate();
 
 uint8_t sc16is7x0_uart_connected(void);
 

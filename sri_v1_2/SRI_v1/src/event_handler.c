@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "sc16is7x0.h"
 #include "event_handler.h"
 #include "main.h"
 #include "misc.h"
@@ -12,6 +13,7 @@
 #include "audio.h"
 #include "ctrl.h"
 #include "board.h"
+#include "winkey.h"
 
 static volatile uint16_t counter_event_10us = 0;
 static volatile uint16_t counter_event_1ms = 0;
@@ -19,6 +21,7 @@ static volatile uint16_t counter_event_1ms = 0;
 volatile struct_event_status event_status;
 
 struct_radio_status prev_radio_status;
+static uint8_t prev_radio_mode_type = 255;
 
 uint8_t event_handler_get_ptt_status(void) {
   return(event_status.curr_ptt_input);
@@ -190,6 +193,28 @@ void event_handler_radio_status_changed(struct_radio_status *curr_status) {
     display_update();
   }
 
+  uint8_t curr_mode_type = status_get_vfo_mode_type();
+  if (prev_radio_mode_type != curr_mode_type) {
+    if (curr_mode_type == STATUS_RADIO_MODE_TYPE_CW) {
+
+      PRINTF("Mode change: CW, init SC16IS740 for CW\n");
+      sc16is7x0_init_winkey();
+      //Route the SC16IS740 serial data to the winkey chip
+      ctrl_fsk_tx_enable_clr();
+
+      //Initialize the winkey chip again
+      winkey_init();
+    }
+    else if (curr_mode_type == STATUS_RADIO_MODE_TYPE_DIGITAL) {
+      PRINTF("Mode change: Digital, init SC16IS740 for FSK\n");
+      //Route the SC16IS740 serial data for FSK output
+      ctrl_fsk_tx_enable_set();
+      sc16is7x0_init_fsk(settings_get_digital_baudrate_divisor(), settings_get_digital_parity(), settings_get_digital_stopbits(), settings_get_digital_bitlength());
+    }
+
+    prev_radio_mode_type = curr_mode_type;
+  }
+
   memcpy(&prev_radio_status, curr_status,sizeof(curr_status));
 }
 
@@ -241,54 +266,56 @@ void event_handler_execute_ptt_change(uint8_t prev_state, uint8_t curr_state) {
 }
 
 void event_handler_cw_execute(void) {
-  if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_WINKEY)) {
-    event_status.temp_cw_input = ((WINKEY_KEY_PORT->FIOPIN & (1<<WINKEY_KEY)) >> WINKEY_KEY);
+  if (status_get_vfo_mode_type() == STATUS_RADIO_MODE_TYPE_CW) {
+    if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_WINKEY)) {
+      event_status.temp_cw_input = ((WINKEY_KEY_PORT->FIOPIN & (1<<WINKEY_KEY)) >> WINKEY_KEY);
 
-    if (event_status.temp_cw_input)
-      event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_WINKEY);
-    else
-      event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_WINKEY);
-  }
-
-  if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_WINKEY_DTR)) {
-    event_status.temp_cw_input = ((FT4232_WK_DTR_PORT->FIOPIN & (1<<FT4232_WK_DTR)) >> FT4232_WK_DTR);
-
-    if (event_status.temp_cw_input)
-      event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_WINKEY_DTR);
-    else
-      event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_WINKEY_DTR);
-  }
-
-  if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_WINKEY_RTS)) {
-    event_status.temp_cw_input = ((FT4232_WK_RTS_PORT->FIOPIN & (1<<FT4232_WK_RTS)) >> FT4232_WK_RTS);
-
-    if (event_status.temp_cw_input)
-      event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_WINKEY_RTS);
-    else
-      event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_WINKEY_RTS);
-  }
-
-  if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_USB_DTR)) {
-    event_status.temp_cw_input = ((FT4232_FSKCW_CW_PORT->FIOPIN & (1<<FT4232_FSKCW_CW)) >> FT4232_FSKCW_CW);
-
-    if (event_status.temp_cw_input)
-      event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_USB_DTR);
-    else
-      event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_USB_DTR);
-  }
-
-  //Check if the CW input status has changed
-  if (event_status.curr_cw_input != event_status.prev_cw_input) {
-    if (event_status.curr_cw_input) {
-      ctrl_radio_cw_set();
-      ctrl_led_cw_on();
-    }
-    else {
-      ctrl_radio_cw_clr();
-      ctrl_led_cw_off();
+      if (event_status.temp_cw_input)
+        event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_WINKEY);
+      else
+        event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_WINKEY);
     }
 
-    event_status.prev_cw_input = event_status.curr_cw_input;
+    if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_WINKEY_DTR)) {
+      event_status.temp_cw_input = ((FT4232_WK_DTR_PORT->FIOPIN & (1<<FT4232_WK_DTR)) >> FT4232_WK_DTR);
+
+      if (event_status.temp_cw_input)
+        event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_WINKEY_DTR);
+      else
+        event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_WINKEY_DTR);
+    }
+
+    if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_WINKEY_RTS)) {
+      event_status.temp_cw_input = ((FT4232_WK_RTS_PORT->FIOPIN & (1<<FT4232_WK_RTS)) >> FT4232_WK_RTS);
+
+      if (event_status.temp_cw_input)
+        event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_WINKEY_RTS);
+      else
+        event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_WINKEY_RTS);
+    }
+
+    if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_USB_DTR)) {
+      event_status.temp_cw_input = ((FT4232_FSKCW_CW_PORT->FIOPIN & (1<<FT4232_FSKCW_CW)) >> FT4232_FSKCW_CW);
+
+      if (event_status.temp_cw_input)
+        event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_USB_DTR);
+      else
+        event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_USB_DTR);
+    }
+
+    //Check if the CW input status has changed
+    if (event_status.curr_cw_input != event_status.prev_cw_input) {
+      if (event_status.curr_cw_input) {
+        ctrl_radio_cw_set();
+        ctrl_led_cw_on();
+      }
+      else {
+        ctrl_radio_cw_clr();
+        ctrl_led_cw_off();
+      }
+
+      event_status.prev_cw_input = event_status.curr_cw_input;
+    }
   }
 }
 

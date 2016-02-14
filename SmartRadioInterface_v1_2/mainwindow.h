@@ -156,6 +156,7 @@ private slots:
   void checkBoxDebugClicked();
   void on_pushButtonDebugClearWindow_clicked();
   void on_checkBoxDebugLogToFile_clicked(bool checked);
+  void on_comboBoxDigitalFSKBaudrate_currentIndexChanged(int index);
 };
 
 #endif // MAINWINDOW_H

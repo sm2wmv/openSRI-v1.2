@@ -194,6 +194,35 @@ typedef struct __attribute__ ((aligned(1))) {
 
 /*********** END CW SETTINGS ***********/
 
+
+/*********** START DIGITAL SETTINGS ***********/
+//! Digital setting for PARITY NONE
+#define SETTING_DIGITAL_PARITY_NONE     0
+//! Digital setting for PARITY EVEN
+#define SETTING_DIGITAL_PARITY_EVEN     1
+//! Digital setting for PARITY ODD
+#define SETTING_DIGITAL_PARITY_ODD      2
+
+//! Digital setting for STOPBITS 1
+#define SETTING_DIGITAL_STOPBITS_1      0
+//! Digital setting for STOPBITS 2
+#define SETTING_DIGITAL_STOPBITS_1_5    1
+//! Digital setting for STOPBITS 3
+#define SETTING_DIGITAL_STOPBITS_2      2
+
+typedef struct __attribute__ ((aligned(1))) {
+  //! The ASCII generated FSK baudrate divisor, (14745600 / (baudrate * 16))
+  uint16_t baudrate_divisor;
+  //! The number of bits (5 = 5 bits, 8 = 8 bits)
+  uint8_t bitlength;
+  //! The parity, 0 = None, 1 = Even, 2 = Odd
+  uint8_t parity;
+  //! The number of stopbits, 0 = 1, 1 = 1.5, 2 = 2
+  uint8_t stopbits;
+} struct_digital_settings;
+
+/*********** END DIGITAL SETTINGS ***********/
+
 /*********** START MISC SETTINGS ***********/
 typedef struct __attribute__ ((aligned(1))) {
   //! The color for the display backlight, RGB Red
@@ -261,15 +290,16 @@ typedef struct __attribute__ ((aligned(1))) {
 /*********** END Display SETTINGS ***********/
 
 typedef struct __attribute__ ((aligned(1))) {
-  struct_radio_settings   radio;
-  struct_ptt_settings     ptt;
-  struct_audio_settings   audio;
-  struct_cw_settings      cw;
-  struct_misc_settings    misc;
-  struct_winkey_settings  winkey;
-  struct_display_item     display_cw;
-  struct_display_item     display_phone;
-  struct_display_item     display_digital;
+  struct_radio_settings     radio;
+  struct_ptt_settings       ptt;
+  struct_audio_settings     audio;
+  struct_cw_settings        cw;
+  struct_misc_settings      misc;
+  struct_winkey_settings    winkey;
+  struct_display_item       display_cw;
+  struct_display_item       display_phone;
+  struct_display_item       display_digital;
+  struct_digital_settings   digital;
 } struct_settings;
 
 /*********** START CW Messages ***********/

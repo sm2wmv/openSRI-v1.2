@@ -145,6 +145,19 @@ public:
   quint8 getBacklightRGBColorBlue();
   QString getCallsign();
 
+  // ==== Digital SET ====
+  void setDigitalFSKBaudrate(quint8 index);
+  void setDigitalFSKStopbits(quint8 index);
+  void setDigitalFSKBitLength(quint8 index);
+  void setDigitalFSKParity(quint8 index);
+
+  // ==== Digital GET ====
+  quint8 getDigitalFSKBaudrate();
+  quint8 getDigitalFSKStopbits();
+  quint8 getDigitalFSKBitLength();
+  quint8 getDigitalFSKParity();
+
+
   // ==== Winkey SET ====
   void setWinkeyKeyerMode(quint8 value);
   void setWinkeySwapPaddles(bool state);
@@ -202,6 +215,7 @@ private:
   CommClass *serialPort;
   struct_settings settings;
   QString cwMessages[8];
+  quint16 digitalFSKBaudrate[11];
 };
 
 #endif // SETTINGS_H

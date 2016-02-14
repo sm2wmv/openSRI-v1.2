@@ -137,6 +137,20 @@ uint8_t settings_get_backlight_rgb_blue(void);
 uint8_t *settings_get_callsign(void);
 /********** END GET MISC SETTINGS **********/
 
+/********** START SET DIGITAL SETTINGS **********/
+void settings_set_digital_baudrate_divisor(uint16_t baudrate_divisor);
+void settings_set_digital_parity(uint8_t parity);
+void settings_set_digital_stopbits(uint8_t stopbits);
+void settings_set_digital_bitlength(uint8_t bitlength);
+/********** END SET DIGITAL SETTINGS **********/
+
+/********** START GET DIGITAL SETTINGS **********/
+uint16_t settings_get_digital_baudrate_divisor(void);
+uint8_t settings_get_digital_parity(void);
+uint8_t settings_get_digital_stopbits(void);
+uint8_t settings_get_digital_bitlength(void);
+/********** END GET DIGITAL SETTINGS **********/
+
 /********** START SET WINKEY SETTINGS **********/
 void settings_set_winkey_keyer_mode(uint8_t value);
 void settings_set_winkey_swap_paddles(uint8_t state);
