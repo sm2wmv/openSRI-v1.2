@@ -10,7 +10,7 @@
 #define RTTY_FIGS     27
 #define RTTY_LETTERS  31
 
-struct_baudot baudot_table[91] = {
+const struct_baudot baudot_table[91] = {
     {0,0},  //NULL
     {0,0},  //SOH
     {0,0},  //STX
@@ -112,17 +112,17 @@ uint8_t rtty_convert_str(int8_t *input_str, int8_t *return_str) {
     if (input_str[i] < 91) {
       if (baudot_table[input_str[i]].baudot_code != 0) {
         if (baudot_table[input_str[i]].figure_shift == 1) {
-          if ((i > 0) && (baudot_table[input_str[i-1]].figure_shift != 1))
+          if (i==0)
             str[pos++] = RTTY_FIGS;
-          else if (i==0)
+          else if (baudot_table[input_str[i-1]].figure_shift != 1)
             str[pos++] = RTTY_FIGS;
 
           str[pos++] = baudot_table[input_str[i]].baudot_code;
         }
         else {
-          if ((i > 0) && (baudot_table[input_str[i-1]].figure_shift == 1))
+          if (i==0)
             str[pos++] = RTTY_LETTERS;
-          else if (i==0)
+          else if (baudot_table[input_str[i-1]].figure_shift == 1)
             str[pos++] = RTTY_LETTERS;
 
           str[pos++] = baudot_table[input_str[i]].baudot_code;
