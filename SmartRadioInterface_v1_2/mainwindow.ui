@@ -40,7 +40,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>7</number>
       </property>
       <property name="iconSize">
        <size>
@@ -1838,8 +1838,8 @@
           <rect>
            <x>160</x>
            <y>20</y>
-           <width>182</width>
-           <height>164</height>
+           <width>184</width>
+           <height>178</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_14">
@@ -2077,8 +2077,8 @@
           <rect>
            <x>20</x>
            <y>190</y>
-           <width>75</width>
-           <height>39</height>
+           <width>77</width>
+           <height>41</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_22">
@@ -2155,7 +2155,7 @@
            <x>20</x>
            <y>250</y>
            <width>132</width>
-           <height>44</height>
+           <height>48</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_26">
@@ -2849,7 +2849,7 @@
         <property name="title">
          <string> FSK </string>
         </property>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>20</x>
@@ -3023,11 +3023,6 @@
          </layout>
         </widget>
        </widget>
-      </widget>
-      <widget class="QWidget" name="tabFSKMessages">
-       <attribute name="title">
-        <string>FSK Messages</string>
-       </attribute>
       </widget>
       <widget class="QWidget" name="tabOther">
        <attribute name="title">

@@ -215,6 +215,17 @@
 #define BOARD_LED_GREEN       29
 #define BOARD_LED_GREEN_PORT  LPC_GPIO4
 
+#define AUX_RELAY_K1  (1<<9)
+#define AUX_RELAY_K2  (1<<10)
+#define AUX_RELAY_K3  (1<<11)
+#define AUX_RELAY_K4  (1<<12)
+#define AUX_RELAY_K5  (1<<13)
+#define AUX_RELAY_K6  (1<<1)
+#define AUX_RELAY_K7  (1<<2)
+#define AUX_RELAY_K8  (1<<3)
+#define AUX_RELAY_K9  (1<<4)
+#define AUX_RELAY_K10 (1<<5)
+
 #endif /* end __BOARD_H */
 
 /****************************************************************************

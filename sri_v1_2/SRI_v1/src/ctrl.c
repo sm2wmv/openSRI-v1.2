@@ -15,8 +15,8 @@ unsigned char io_exp_a1_out_status = (1<<6) | (1<<4) | (1<<5) | (1<<3);
 unsigned char io_exp_a2_out_status = (1<<6) | (1<<7);
 unsigned char io_exp_a3_out_status = 0xFF;
 
-unsigned char io_exp_a4_out_status = 0xFF;
-unsigned char io_exp_a5_out_status = 0xFF;
+unsigned char io_exp_a4_out_status = 0x00;
+unsigned char io_exp_a5_out_status = 0x00;
 unsigned char io_exp_a6_out_status = 0xFF;
 unsigned char io_exp_a7_out_status = 0xFF;
 unsigned char io_exp_a8_out_status = 0xFF;
@@ -165,7 +165,7 @@ uint8_t ctrl_i2c_io_exp_a8_get(void) {
   return(ret);
 }
 
-void ctrl_i2c_io_exp_a0_set(void) {
+uint8_t ctrl_i2c_io_exp_a0_set(void) {
 	I2C_M_SETUP_Type transferMCfg;
 	transferMCfg.sl_addr7bit = IO_EXPA0_ADDR >> 1;
 	transferMCfg.tx_data = &io_exp_a0_out_status;
@@ -174,10 +174,10 @@ void ctrl_i2c_io_exp_a0_set(void) {
 	transferMCfg.rx_length = 0;
 	transferMCfg.retransmissions_max = CTRL_IO_EXP_RETRANSMISSIONS_MAX;
 
-	I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING);
+	return(I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING));
 }
 
-void ctrl_i2c_io_exp_a1_set(void) {
+uint8_t ctrl_i2c_io_exp_a1_set(void) {
 	I2C_M_SETUP_Type transferMCfg;
 	transferMCfg.sl_addr7bit = IO_EXPA1_ADDR >> 1;
 	transferMCfg.tx_data = &io_exp_a1_out_status;
@@ -186,10 +186,10 @@ void ctrl_i2c_io_exp_a1_set(void) {
 	transferMCfg.rx_length = 0;
 	transferMCfg.retransmissions_max = CTRL_IO_EXP_RETRANSMISSIONS_MAX;
 
-	I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING);
+	return(I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING));
 }
 
-void ctrl_i2c_io_exp_a2_set(void) {
+uint8_t ctrl_i2c_io_exp_a2_set(void) {
 	I2C_M_SETUP_Type transferMCfg;
 	transferMCfg.sl_addr7bit = IO_EXPA2_ADDR >> 1;
 	transferMCfg.tx_data = &io_exp_a2_out_status;
@@ -198,10 +198,10 @@ void ctrl_i2c_io_exp_a2_set(void) {
 	transferMCfg.rx_length = 0;
 	transferMCfg.retransmissions_max = CTRL_IO_EXP_RETRANSMISSIONS_MAX;
 
-	I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING);
+	return(I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING));
 }
 
-void ctrl_i2c_io_exp_a3_set(void) {
+uint8_t ctrl_i2c_io_exp_a3_set(void) {
 	I2C_M_SETUP_Type transferMCfg;
 	transferMCfg.sl_addr7bit = IO_EXPA3_ADDR >> 1;
 	transferMCfg.tx_data = &io_exp_a3_out_status;
@@ -210,10 +210,10 @@ void ctrl_i2c_io_exp_a3_set(void) {
 	transferMCfg.rx_length = 0;
 	transferMCfg.retransmissions_max = CTRL_IO_EXP_RETRANSMISSIONS_MAX;
 
-	I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING);
+	return(I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING));
 }
 
-void ctrl_i2c_io_exp_a4_set(void) {
+uint8_t ctrl_i2c_io_exp_a4_set(void) {
   I2C_M_SETUP_Type transferMCfg;
   transferMCfg.sl_addr7bit = IO_EXPA4_ADDR >> 1;
   transferMCfg.tx_data = &io_exp_a4_out_status;
@@ -222,10 +222,10 @@ void ctrl_i2c_io_exp_a4_set(void) {
   transferMCfg.rx_length = 0;
   transferMCfg.retransmissions_max = CTRL_IO_EXP_RETRANSMISSIONS_MAX;
 
-  I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING);
+  return(I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING));
 }
 
-void ctrl_i2c_io_exp_a5_set(void) {
+uint8_t ctrl_i2c_io_exp_a5_set(void) {
   I2C_M_SETUP_Type transferMCfg;
   transferMCfg.sl_addr7bit = IO_EXPA5_ADDR >> 1;
   transferMCfg.tx_data = &io_exp_a5_out_status;
@@ -234,10 +234,10 @@ void ctrl_i2c_io_exp_a5_set(void) {
   transferMCfg.rx_length = 0;
   transferMCfg.retransmissions_max = CTRL_IO_EXP_RETRANSMISSIONS_MAX;
 
-  I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING);
+  return(I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING));
 }
 
-void ctrl_i2c_io_exp_a6_set(void) {
+uint8_t ctrl_i2c_io_exp_a6_set(void) {
   I2C_M_SETUP_Type transferMCfg;
   transferMCfg.sl_addr7bit = IO_EXPA6_ADDR >> 1;
   transferMCfg.tx_data = &io_exp_a6_out_status;
@@ -246,10 +246,10 @@ void ctrl_i2c_io_exp_a6_set(void) {
   transferMCfg.rx_length = 0;
   transferMCfg.retransmissions_max = CTRL_IO_EXP_RETRANSMISSIONS_MAX;
 
-  I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING);
+  return(I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING));
 }
 
-void ctrl_i2c_io_exp_a7_set(void) {
+uint8_t ctrl_i2c_io_exp_a7_set(void) {
   I2C_M_SETUP_Type transferMCfg;
   transferMCfg.sl_addr7bit = IO_EXPA7_ADDR >> 1;
   transferMCfg.tx_data = &io_exp_a7_out_status;
@@ -258,10 +258,10 @@ void ctrl_i2c_io_exp_a7_set(void) {
   transferMCfg.rx_length = 0;
   transferMCfg.retransmissions_max = CTRL_IO_EXP_RETRANSMISSIONS_MAX;
 
-  I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING);
+  return(I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING));
 }
 
-void ctrl_i2c_io_exp_a8_set(void) {
+uint8_t ctrl_i2c_io_exp_a8_set(void) {
   I2C_M_SETUP_Type transferMCfg;
   transferMCfg.sl_addr7bit = IO_EXPA8_ADDR >> 1;
   transferMCfg.tx_data = &io_exp_a8_out_status;
@@ -270,7 +270,7 @@ void ctrl_i2c_io_exp_a8_set(void) {
   transferMCfg.rx_length = 0;
   transferMCfg.retransmissions_max = CTRL_IO_EXP_RETRANSMISSIONS_MAX;
 
-  I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING);
+  return(I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING));
 }
 
 void ctrl_fsk_tx_enable_set(void) {
@@ -835,4 +835,26 @@ void ctrl_backlight_set_rgb(uint8_t red, uint8_t green, uint8_t blue) {
   transferMCfg.retransmissions_max = 1;
 
   I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING);
+}
+
+void ctrl_aux_relay_set(uint16_t conf) {
+  uint8_t low = conf & 0xFF;
+  uint8_t high = conf >> 8;
+
+  io_exp_a4_out_status |= low;
+  PRINTF("AUX RELAY >> I2C response A4: 0x%02X\n",ctrl_i2c_io_exp_a4_set());
+
+  io_exp_a5_out_status |= high;
+  PRINTF("AUX RELAY >> I2C response A5: 0x%02X\n",ctrl_i2c_io_exp_a5_set());
+}
+
+void ctrl_aux_relay_clr(uint16_t conf) {
+  uint8_t low = conf & 0xFF;
+  uint8_t high = conf >> 8;
+
+  io_exp_a4_out_status &= ~low;
+  PRINTF("AUX RELAY >> I2C response A4: 0x%02X\n",ctrl_i2c_io_exp_a4_set());
+
+  io_exp_a4_out_status &= ~high;
+  PRINTF("AUX RELAY >> I2C response A5: 0x%02X\n",ctrl_i2c_io_exp_a5_set());
 }

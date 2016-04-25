@@ -143,13 +143,13 @@ int main (void) {
   init_uart0(250000);
 
   #ifdef WK_PORT_DEBUG
-    init_uart3(115200);
+    init_uart3(250000);
   #else
     init_uart3(1200); //Init to 1200 baud on the WinKey port
   #endif
 
   #ifdef CAT_PORT_DEBUG
-    cat_interface_init_computer_uart(115200,0,0,0,0);
+    cat_interface_init_computer_uart(250000,0,0,0,0);
   #endif
 
   //Initialize and enable timer 0 to run with 1ms intervals
@@ -178,7 +178,10 @@ int main (void) {
   ctrl_i2c_io_exp_a2_set();
   ctrl_i2c_io_exp_a3_set();
 
-  ctrl_fsk_tx_enable_clr();
+  ctrl_i2c_io_exp_a4_set();
+  ctrl_i2c_io_exp_a5_set();
+
+  ctrl_fsk_tx_enable_set();
 
   delay_ms(100);
 

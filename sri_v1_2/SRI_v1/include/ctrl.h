@@ -31,15 +31,15 @@ uint8_t ctrl_i2c_io_exp_a6_get(void);
 uint8_t ctrl_i2c_io_exp_a7_get(void);
 uint8_t ctrl_i2c_io_exp_a8_get(void);
 
-void ctrl_i2c_io_exp_a0_set(void);
-void ctrl_i2c_io_exp_a1_set(void);
-void ctrl_i2c_io_exp_a2_set(void);
-void ctrl_i2c_io_exp_a3_set(void);
-void ctrl_i2c_io_exp_a4_set(void);
-void ctrl_i2c_io_exp_a5_set(void);
-void ctrl_i2c_io_exp_a6_set(void);
-void ctrl_i2c_io_exp_a7_set(void);
-void ctrl_i2c_io_exp_a8_set(void);
+uint8_t ctrl_i2c_io_exp_a0_set(void);
+uint8_t ctrl_i2c_io_exp_a1_set(void);
+uint8_t ctrl_i2c_io_exp_a2_set(void);
+uint8_t ctrl_i2c_io_exp_a3_set(void);
+uint8_t ctrl_i2c_io_exp_a4_set(void);
+uint8_t ctrl_i2c_io_exp_a5_set(void);
+uint8_t ctrl_i2c_io_exp_a6_set(void);
+uint8_t ctrl_i2c_io_exp_a7_set(void);
+uint8_t ctrl_i2c_io_exp_a8_set(void);
 
 void ctrl_pcm2912_mic_preamp_on(void);
 void ctrl_pcm2912_mic_preamp_off(void);
@@ -99,6 +99,9 @@ void ctrl_backlight_set_rgb(uint8_t red, uint8_t green, uint8_t blue);
 
 void ctrl_radio_input_source_low(void);
 void ctrl_radio_input_source_high(void);
+
+void ctrl_aux_relay_set(uint16_t conf);
+void ctrl_aux_relay_clr(uint16_t conf);
 
 #endif /* end __CTRL_H */
 

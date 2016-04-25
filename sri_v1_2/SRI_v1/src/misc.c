@@ -11,9 +11,12 @@
 #include "main.h"
 
 void PRINTF_TX(const char *format, ...);
+void PRINTF_RAW_TX(const char *format, ...);
 
 static uint8_t debug_state = 0;
+
 static uint8_t system_debug_state = 0;
+
 static uint8_t winkey_debug_state = 0;
 static uint8_t cat_debug_state = 0;
 static uint8_t sequencer_debug_state = 0;
@@ -41,6 +44,14 @@ void misc_set_sequencer_debug_state(uint8_t state) {
 void PRINTF_CAT(const char *format, ...) {
   if (cat_debug_state != 0)
     PRINTF_TX(format);
+
+  #ifdef WK_PORT_DEBUG
+    PRINTF_RAW_TX(format);
+  #endif
+
+  #ifdef CAT_PORT_DEBUG
+    PRINTF_RAW_TX(format);
+  #endif
 }
 
 void PRINTF_SEQ(const char *format, ...) {
@@ -51,11 +62,27 @@ void PRINTF_SEQ(const char *format, ...) {
 void PRINTF_WK(const char *format, ...) {
   if (winkey_debug_state != 0)
     PRINTF_TX(format);
+
+  #ifdef WK_PORT_DEBUG
+    PRINTF_RAW_TX(format);
+  #endif
+
+  #ifdef CAT_PORT_DEBUG
+    PRINTF_RAW_TX(format);
+  #endif
 }
 
 void PRINTF(const char *format, ...) {
   if (system_debug_state != 0)
     PRINTF_TX(format);
+
+  #ifdef WK_PORT_DEBUG
+    PRINTF_RAW_TX(format);
+  #endif
+
+  #ifdef CAT_PORT_DEBUG
+    PRINTF_RAW_TX(format);
+  #endif
 }
 
 void PRINTF_TX(const char *format, ...) {
@@ -72,7 +99,10 @@ void PRINTF_TX(const char *format, ...) {
     if (debug_res > 0)
       comm_interface_add_tx_message(SRI_CMD_DEBUG_TEXT, debug_res+retlen, (uint8_t *)debug_output_str);
   }
+}
 
+
+void PRINTF_RAW_TX(const char *format, ...) {
   #ifdef WK_PORT_DEBUG
     char output_str[DEBUG_STR_LEN];
 

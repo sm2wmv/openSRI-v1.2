@@ -4,6 +4,7 @@
 
 #include "sequencer.h"
 #include "main.h"
+#include "misc.h"
 #include "event_queue.h"
 #include "settings.h"
 #include "event_handler.h"

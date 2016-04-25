@@ -16,6 +16,10 @@
 #include "winkey.h"
 #include "event_handler.h"
 
+#include "sequencer.h"
+#include "sc16is7x0.h"
+#include "rtty.h"
+
 static uint8_t computer_inteface_connection_active = 0;
 uint16_t counter_last_pong = 0;
 uint16_t counter_last_ping = 0;
@@ -55,7 +59,17 @@ void computer_interface_uart_rx(struct_comm_interface_msg message) {
     comm_interface_add_tx_message(SRI_CMD_GET_FIRMWARE_REV,5,(uint8_t *)FIRMWARE_VER);
   }
   else if (message.cmd == SRI_CMD_TEST_COMMAND) {
+    PRINTF("TEST CMD >> Sending FSK\n");
 
+    int8_t temp_str[100];
+
+    uint8_t len = rtty_convert_str((int8_t *)"SJ2W SJ2W TEST", temp_str);
+
+    PRINTF("RTTY >> LEN: %i\n",len);
+
+    sc16is7x0_reset_tx_fifo();
+    for (uint8_t i=0;i<len;i++)
+      sc16is7x0_write_char(temp_str[i]);
   }
   else if (message.cmd == SRI_CMD_SEND_SETTINGS) {
     settings_update_from_computer((uint8_t *)&(message.data)+2, (uint16_t)(((uint16_t)(message.data[0])<<8)+message.data[1]), message.length-2);
