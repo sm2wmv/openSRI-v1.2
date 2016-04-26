@@ -3,6 +3,7 @@
 #include "lpc17xx_uart.h"   /* Central include file */
 #include "lpc17xx_nvic.h"
 #include "lpc17xx_pinsel.h"
+#include "lpc17xx_exti.h"
 
 #include "board.h"
 
@@ -123,6 +124,9 @@ void init_io(void) {
   //configuration for the pins QEI
   LPC_PINCON->PINSEL3 = ((1<<8) | (1<<14));//PH A&B & index
 
+  //Enable EINT3 for Winkey CW
+  //LPC_PINCON->PINSEL4 |= (1<<26);
+
   LPC_SC->PCONP |= (1<<3);
   LPC_SC->PCONP |= (1<<4);
   LPC_SC->PCONP |= (1<<7);
@@ -136,4 +140,20 @@ void init_io(void) {
 
   //Turn off LED on the board
   LPC_GPIO4->FIOSET |= BOARD_LED_GREEN;
+
+  //Enable the external interrupt for the FSK/CW port CW mode
+  LPC_GPIOINT->IO2IntEnR |= (1<<11);
+  LPC_GPIOINT->IO2IntEnF |= (1<<11);
+
+  //Enable the external interrupt for the FSK/CW port FSK mode
+  LPC_GPIOINT->IO2IntEnR |= (1<<12);
+  LPC_GPIOINT->IO2IntEnF |= (1<<12);
+
+  //Enable the external interrupt for the Winkey CW
+  LPC_GPIOINT->IO2IntEnR |= (1<<13);
+  LPC_GPIOINT->IO2IntEnF |= (1<<13);
+
+  NVIC_SetPriority(EINT1_IRQn,0);
+  NVIC_SetPriority(EINT2_IRQn,0);
+  NVIC_SetPriority(EINT3_IRQn,0);
 }

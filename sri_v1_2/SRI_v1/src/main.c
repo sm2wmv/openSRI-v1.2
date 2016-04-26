@@ -159,6 +159,9 @@ int main (void) {
   enable_timer(0);
   enable_timer(1);
 
+  NVIC_SetPriority(TIMER0_IRQn, 1);
+  NVIC_SetPriority(TIMER1_IRQn, 1);
+
   comm_interface_init(computer_interface_uart_rx, computer_interface_uart_tx, computer_interface_uart_poll_rx);
 
   //Turn the power LED on
@@ -316,8 +319,6 @@ void main_timer0_tick(void) {
   if ((timer0_counter % 1000) == 0) {
     flag_read_buttons = 1;
   }
-
-  //sc16is7x0_1ms_tick();
 
   if (flags.init_done) {
     comm_interface_1ms_tick();

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "lpc17xx_exti.h"
+
 #include "sc16is7x0.h"
 #include "event_handler.h"
 #include "main.h"
@@ -195,6 +197,11 @@ void event_handler_radio_status_changed(struct_radio_status *curr_status) {
 
   uint8_t curr_mode_type = status_get_vfo_mode_type();
   if (prev_radio_mode_type != curr_mode_type) {
+    //Disable the Interrupts for FSK and CW
+    NVIC_DisableIRQ(EINT1_IRQn);
+    NVIC_DisableIRQ(EINT2_IRQn);
+    NVIC_DisableIRQ(EINT3_IRQn);
+
     if (curr_mode_type == STATUS_RADIO_MODE_TYPE_CW) {
 
       PRINTF("Mode change: CW, init SC16IS740 for CW\n");
@@ -204,6 +211,19 @@ void event_handler_radio_status_changed(struct_radio_status *curr_status) {
 
       //Initialize the winkey chip again
       winkey_init();
+
+      if ((settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_USB_DTR)) != 0) {
+        LPC_GPIOINT->IO2IntClr=(1<<11);
+        NVIC_EnableIRQ(EINT1_IRQn);
+      }
+
+      if ((settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_WINKEY)) != 0) {
+        LPC_GPIOINT->IO2IntClr=(1<<13);
+        NVIC_EnableIRQ(EINT3_IRQn);
+      }
+
+      ctrl_radio_cw_clr();
+      ctrl_led_cw_off();
     }
     else if (curr_mode_type == STATUS_RADIO_MODE_TYPE_DIGITAL) {
       PRINTF("Mode change: Digital, init SC16IS740 for FSK\n");
@@ -262,60 +282,6 @@ void event_handler_execute_ptt_change(uint8_t prev_state, uint8_t curr_state) {
   else {
     //Do nothing
     PRINTF("EVENT_HANDLER_PTT_CHANGE: DO NOTHING\n");
-  }
-}
-
-void event_handler_cw_execute(void) {
-  if (status_get_vfo_mode_type() == STATUS_RADIO_MODE_TYPE_CW) {
-    if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_WINKEY)) {
-      event_status.temp_cw_input = ((WINKEY_KEY_PORT->FIOPIN & (1<<WINKEY_KEY)) >> WINKEY_KEY);
-
-      if (event_status.temp_cw_input)
-        event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_WINKEY);
-      else
-        event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_WINKEY);
-    }
-
-    if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_WINKEY_DTR)) {
-      event_status.temp_cw_input = ((FT4232_WK_DTR_PORT->FIOPIN & (1<<FT4232_WK_DTR)) >> FT4232_WK_DTR);
-
-      if (event_status.temp_cw_input)
-        event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_WINKEY_DTR);
-      else
-        event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_WINKEY_DTR);
-    }
-
-    if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_WINKEY_RTS)) {
-      event_status.temp_cw_input = ((FT4232_WK_RTS_PORT->FIOPIN & (1<<FT4232_WK_RTS)) >> FT4232_WK_RTS);
-
-      if (event_status.temp_cw_input)
-        event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_WINKEY_RTS);
-      else
-        event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_WINKEY_RTS);
-    }
-
-    if (settings_get_cw_input_source() & (1<<SETTING_CW_INPUT_SOURCE_USB_DTR)) {
-      event_status.temp_cw_input = ((FT4232_FSKCW_CW_PORT->FIOPIN & (1<<FT4232_FSKCW_CW)) >> FT4232_FSKCW_CW);
-
-      if (event_status.temp_cw_input)
-        event_status.curr_cw_input &= ~(1<<SETTING_CW_INPUT_SOURCE_USB_DTR);
-      else
-        event_status.curr_cw_input |= (1<<SETTING_CW_INPUT_SOURCE_USB_DTR);
-    }
-
-    //Check if the CW input status has changed
-    if (event_status.curr_cw_input != event_status.prev_cw_input) {
-      if (event_status.curr_cw_input) {
-        ctrl_radio_cw_set();
-        ctrl_led_cw_on();
-      }
-      else {
-        ctrl_radio_cw_clr();
-        ctrl_led_cw_off();
-      }
-
-      event_status.prev_cw_input = event_status.curr_cw_input;
-    }
   }
 }
 
@@ -434,10 +400,45 @@ void event_handler_10us_tick(void) {
     event_status.flags |= (1<<EVENT_HANDLER_CHECK_PTT_INPUTS);
   }
 
-  //Check the CW input status every 250 us
-  if ((counter_event_10us % 25) == 0) {
-    event_handler_cw_execute();
+  counter_event_10us++;
+}
+
+void EINT1_IRQHandler(void) {
+  if(LPC_GPIOINT->IO2IntStatF & (1<<11)) {
+    RADIO_CW_PORT->FIOCLR = (1<<RADIO_CW);
+    FRONT_LED_CW_PORT->FIOSET = (1<<FRONT_LED_CW);
+   }
+
+  if(LPC_GPIOINT->IO2IntStatR & (1<<11)) {
+    RADIO_CW_PORT->FIOSET = (1<<RADIO_CW);
+    FRONT_LED_CW_PORT->FIOCLR = (1<<FRONT_LED_CW);
   }
 
-  counter_event_10us++;
+  LPC_GPIOINT->IO2IntClr=(1<<11);
+}
+
+void EINT2_IRQHandler(void) {
+  if(LPC_GPIOINT->IO2IntStatF & (1<<11)) {
+    //Enter FSK code here
+  }
+
+  if(LPC_GPIOINT->IO2IntStatR & (1<<11)) {
+    //Enter FSK code here
+  }
+
+  LPC_GPIOINT->IO2IntClr=(1<<12);
+}
+
+void EINT3_IRQHandler(void) {
+  if(LPC_GPIOINT->IO2IntStatF & (1<<13)) {
+    RADIO_CW_PORT->FIOCLR = (1<<RADIO_CW);
+    FRONT_LED_CW_PORT->FIOSET = (1<<FRONT_LED_CW);
+   }
+
+  if(LPC_GPIOINT->IO2IntStatR & (1<<13)) {
+    RADIO_CW_PORT->FIOSET = (1<<RADIO_CW);
+    FRONT_LED_CW_PORT->FIOCLR = (1<<FRONT_LED_CW);
+  }
+
+  LPC_GPIOINT->IO2IntClr=(1<<13);
 }

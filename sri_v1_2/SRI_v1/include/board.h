@@ -176,9 +176,8 @@
 #define LCD_EN_PORT             LPC_GPIO1
 #define WINKEY_PTT		          30
 #define WINKEY_PTT_PORT         LPC_GPIO1
-#define WINKEY_KEY              31
-#define WINKEY_KEY_PORT         LPC_GPIO1
-
+#define FT4232_FSKCW_PTT        31
+#define FT4232_FSKCW_PTT_PORT   LPC_GPIO1
 
 /* PORT 2 */
 #define LCD_DB0                 0
@@ -197,10 +196,10 @@
 #define FRONT_ENCODER_BUTTON_PORT	LPC_GPIO2
 #define FT4232_FSKCW_CW			    11
 #define FT4232_FSKCW_CW_PORT	  LPC_GPIO2
-#define FT4232_FSKCW_FSK		    12
-#define FT4232_FSKCW_FSK_PORT	  LPC_GPIO2
-#define FT4232_FSKCW_PTT		    13
-#define FT4232_FSKCW_PTT_PORT	  LPC_GPIO2
+#define FT4232_FSKCW_FSK        12
+#define FT4232_FSKCW_FSK_PORT   LPC_GPIO2
+#define WINKEY_KEY      		    13
+#define WINKEY_KEY_PORT	  LPC_GPIO2
 
 /* PORT 3 */
 #define PTT_AMP                 25
