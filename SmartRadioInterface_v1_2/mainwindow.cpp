@@ -614,7 +614,7 @@ void MainWindow::parseCommData(StructMessage message) {
     lastPongCounter = 0;
   }
   else if (message.cmd == SRI_CMD_WINKEY) {
-    if (message.data[0] == SRI_SUB_CMD_WINKEY_CHARS_SENT) {
+    if (message.data[0] == SRI_CMD_SUB_WINKEY_CHARS_SENT) {
       ui->lineEditWinkeyText->setText(ui->lineEditWinkeyText->text() + message.data[1]);
 
       lastPongCounter = 0;
@@ -639,7 +639,7 @@ void MainWindow::parseCommData(StructMessage message) {
     ui->textEditDebug->moveCursor (QTextCursor::End);
   }
   else if (message.cmd == SRI_CMD_CW_MESSAGE) {
-    if (message.data[0] == SRI_SUB_CMD_SET_CW_MESSAGE) {
+    if (message.data[0] == SRI_CMD_SUB_SET_CW_MESSAGE) {
       QString str;
 
       for (quint8 i=2;i<message.length;i++)
@@ -870,34 +870,42 @@ void MainWindow::on_checkBoxPTTOutputAmpflier_toggled(bool checked) {
 
 void MainWindow::on_spinBoxPTTRadioPreDelay_valueChanged(int arg1) {
   settings->setPTTRadioPreDelay(arg1);
+  serialPort->addTXMessage(SRI_CMD_SEQ_SETTINGS_CHANGED, SRI_CMD_SUB_SEQ_RADIO_DELAY_CHANGED);
 }
 
 void MainWindow::on_spinBoxPTTRadioPostDelay_valueChanged(int arg1) {
   settings->setPTTRadioPostDelay(arg1);
+  serialPort->addTXMessage(SRI_CMD_SEQ_SETTINGS_CHANGED, SRI_CMD_SUB_SEQ_RADIO_DELAY_CHANGED);
 }
 
 void MainWindow::on_spinBoxPTTAmplifierPreDelay_valueChanged(int arg1) {
   settings->setPTTAmpPreDelay(arg1);
+  serialPort->addTXMessage(SRI_CMD_SEQ_SETTINGS_CHANGED);
 }
 
 void MainWindow::on_spinBoxPTTAmplifierPostDelay_valueChanged(int arg1) {
   settings->setPTTAmpPostDelay(arg1);
+  serialPort->addTXMessage(SRI_CMD_SEQ_SETTINGS_CHANGED);
 }
 
 void MainWindow::on_spinBoxPTTInhibitPreDelay_valueChanged(int arg1) {
   settings->setPTTInhibitPreDelay(arg1);
+  serialPort->addTXMessage(SRI_CMD_SEQ_SETTINGS_CHANGED);
 }
 
 void MainWindow::on_spinBoxPTTInhibitPostDelay_valueChanged(int arg1) {
   settings->setPTTInhibitPostDelay(arg1);
+  serialPort->addTXMessage(SRI_CMD_SEQ_SETTINGS_CHANGED);
 }
 
 void MainWindow::on_spinBoxPTTAntennaPreDelay_valueChanged(int arg1) {
   settings->setPTTAntennaPreDelay(arg1);
+  serialPort->addTXMessage(SRI_CMD_SEQ_SETTINGS_CHANGED);
 }
 
 void MainWindow::on_spinBoxPTTAntennaPostDelay_valueChanged(int arg1) {
   settings->setPTTAntennaPostDelay(arg1);
+  serialPort->addTXMessage(SRI_CMD_SEQ_SETTINGS_CHANGED);
 }
 
 void MainWindow::on_actionSaveToEEPROM_triggered() {
@@ -1120,55 +1128,55 @@ void MainWindow::on_pushButtonCWMessagesSaveAll_clicked() {
 
 void MainWindow::on_pushButtonCWMessageSend1_clicked() {
   if (serialPort->isOpen()) {
-    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_SUB_CMD_PLAY_CW_MESSAGE, (qint8)0);
+    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_CMD_SUB_PLAY_CW_MESSAGE, (qint8)0);
   }
 }
 
 void MainWindow::on_pushButtonCWMessageSend2_clicked() {
   if (serialPort->isOpen()) {
-    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_SUB_CMD_PLAY_CW_MESSAGE, (qint8)1);
+    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_CMD_SUB_PLAY_CW_MESSAGE, (qint8)1);
   }
 }
 
 void MainWindow::on_pushButtonCWMessageSend3_clicked(){
   if (serialPort->isOpen()) {
-    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_SUB_CMD_PLAY_CW_MESSAGE, (qint8)2);
+    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_CMD_SUB_PLAY_CW_MESSAGE, (qint8)2);
   }
 }
 
 void MainWindow::on_pushButtonCWMessageSend4_clicked() {
   if (serialPort->isOpen()) {
-    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_SUB_CMD_PLAY_CW_MESSAGE, (qint8)3);
+    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_CMD_SUB_PLAY_CW_MESSAGE, (qint8)3);
   }
 }
 
 void MainWindow::on_pushButtonCWMessageSend5_clicked() {
   if (serialPort->isOpen()) {
-    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_SUB_CMD_PLAY_CW_MESSAGE, (qint8)4);
+    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_CMD_SUB_PLAY_CW_MESSAGE, (qint8)4);
   }
 }
 
 void MainWindow::on_pushButtonCWMessageSend6_clicked() {
   if (serialPort->isOpen()) {
-    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_SUB_CMD_PLAY_CW_MESSAGE, (qint8)5);
+    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_CMD_SUB_PLAY_CW_MESSAGE, (qint8)5);
   }
 }
 
 void MainWindow::on_pushButtonCWMessageSend7_clicked() {
   if (serialPort->isOpen()) {
-    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_SUB_CMD_PLAY_CW_MESSAGE, (qint8)6);
+    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_CMD_SUB_PLAY_CW_MESSAGE, (qint8)6);
   }
 }
 
 void MainWindow::on_pushButtonCWMessageSend8_clicked() {
   if (serialPort->isOpen()) {
-    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_SUB_CMD_PLAY_CW_MESSAGE, (qint8)7);
+    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_CMD_SUB_PLAY_CW_MESSAGE, (qint8)7);
   }
 }
 
 void MainWindow::on_pushButtonCWMessagesStop_clicked() {
   if (serialPort->isOpen()) {
-    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_SUB_CMD_STOP_CW_MESSAGE);
+    serialPort->addTXMessage(SRI_CMD_CW_MESSAGE, SRI_CMD_SUB_STOP_CW_MESSAGE);
   }
 
 }
