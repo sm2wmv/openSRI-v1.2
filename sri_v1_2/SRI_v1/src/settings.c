@@ -921,7 +921,7 @@ void settings_send_cw_messages(void) {
       len = strlen((char *)(cw_messages.str[i]));
 
       if ((len > 0) && (len < 51)) {
-        temp_data[0] = SRI_SUB_CMD_SET_CW_MESSAGE;
+        temp_data[0] = SRI_CMD_SUB_SET_CW_MESSAGE;
         temp_data[1] = i;
 
         for (uint8_t j=0;j<len;j++)

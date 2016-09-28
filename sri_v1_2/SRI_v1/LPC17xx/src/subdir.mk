@@ -16,11 +16,13 @@ C_SRCS += \
 ../src/event_handler.c \
 ../src/event_queue.c \
 ../src/init.c \
+../src/keyboard_host.c \
 ../src/lcd.c \
 ../src/main.c \
 ../src/misc.c \
 ../src/qei.c \
 ../src/queue.c \
+../src/rtty.c \
 ../src/sc16is7x0.c \
 ../src/sequencer.c \
 ../src/settings.c \
@@ -41,11 +43,13 @@ OBJS += \
 ./src/event_handler.o \
 ./src/event_queue.o \
 ./src/init.o \
+./src/keyboard_host.o \
 ./src/lcd.o \
 ./src/main.o \
 ./src/misc.o \
 ./src/qei.o \
 ./src/queue.o \
+./src/rtty.o \
 ./src/sc16is7x0.o \
 ./src/sequencer.o \
 ./src/settings.o \
@@ -66,11 +70,13 @@ C_DEPS += \
 ./src/event_handler.d \
 ./src/event_queue.d \
 ./src/init.d \
+./src/keyboard_host.d \
 ./src/lcd.d \
 ./src/main.d \
 ./src/misc.d \
 ./src/qei.d \
 ./src/queue.d \
+./src/rtty.d \
 ./src/sc16is7x0.d \
 ./src/sequencer.d \
 ./src/settings.d \
@@ -83,14 +89,21 @@ C_DEPS += \
 src/%.o: ../src/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU C Compiler'
-	arm-none-eabi-gcc -D__LPC17XX__ -DUSB_DEVICE_ONLY -D__USE_CMSIS=CMSISv2p00_LPC17xx -D__REDLIB__ -D__CODE_RED -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\inc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\lpcinc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\LPC17xxLib\inc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\SRI_v1\include" -O0 -g3 -Wall -Wextra -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -std=gnu99 -mcpu=cortex-m3 -mthumb -D__REDLIB__ -specs=redlib.specs -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	arm-none-eabi-gcc -D__LPC17XX__ -DUSB_HOST_ONLY -D__USE_CMSIS=CMSISv2p00_LPC17xx -D__REDLIB__ -D__CODE_RED -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\inc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\LPCUSBLib\Drivers\USB" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\lpcinc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\LPC17xxLib\inc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\SRI_v1\include" -include"C:\Users\micke\Documents\openSRI\sri_v1_2\LPCUSBLib\Drivers\USB\USB.h" -O0 -g3 -Wall -Wextra -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -std=gnu99 -mcpu=cortex-m3 -mthumb -D__REDLIB__ -specs=redlib.specs -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+src/keyboard_host.o: ../src/keyboard_host.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: MCU C Compiler'
+	arm-none-eabi-gcc -D__LPC17XX__ -DUSB_HOST_ONLY -D__USE_CMSIS=CMSISv2p00_LPC17xx -D__REDLIB__ -D__CODE_RED -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\inc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\LPCUSBLib\Drivers\USB" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\lpcinc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\LPC17xxLib\inc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\SRI_v1\include" -include"C:\Users\micke\Documents\openSRI\sri_v1_2\LPCUSBLib\Drivers\USB\USB.h" -O0 -g3 -Wall -Wextra -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -std=gnu99 -mcpu=cortex-m3 -mthumb -D__REDLIB__ -specs=redlib.specs -MMD -MP -MF"$(@:%.o=%.d)" -MT"src/keyboard_host.d" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
 src/main.o: ../src/main.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU C Compiler'
-	arm-none-eabi-gcc -D__LPC17XX__ -DUSB_DEVICE_ONLY -D__USE_CMSIS=CMSISv2p00_LPC17xx -D__REDLIB__ -D__CODE_RED -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\inc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\lpcinc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\LPC17xxLib\inc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\SRI_v1\include" -O0 -g3 -Wall -Wextra -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -std=gnu99 -mcpu=cortex-m3 -mthumb -D__REDLIB__ -specs=redlib.specs -MMD -MP -MF"$(@:%.o=%.d)" -MT"src/main.d" -o "$@" "$<"
+	arm-none-eabi-gcc -D__LPC17XX__ -DUSB_HOST_ONLY -D__USE_CMSIS=CMSISv2p00_LPC17xx -D__REDLIB__ -D__CODE_RED -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\inc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\CMSISv2p00_LPC17xx\lpcinc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\CDL\LPC17xxLib\inc" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\SRI_v1\include" -I"C:\Users\micke\Documents\openSRI\sri_v1_2\LPCUSBLib\Drivers\USB" -include"C:\Users\micke\Documents\openSRI\sri_v1_2\LPCUSBLib\Drivers\USB\USB.h" -O0 -g3 -Wall -Wextra -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -std=gnu99 -mcpu=cortex-m3 -mthumb -D__REDLIB__ -specs=redlib.specs -MMD -MP -MF"$(@:%.o=%.d)" -MT"src/main.d" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

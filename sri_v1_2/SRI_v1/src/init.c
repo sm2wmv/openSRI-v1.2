@@ -122,7 +122,11 @@ void init_io(void) {
   LPC_PINCON->PINMODE3 |= (3<<28) | (3<<30);
 
   //configuration for the pins QEI
-  LPC_PINCON->PINSEL3 = ((1<<8) | (1<<14));//PH A&B & index
+  //PH A&B & index
+  LPC_PINCON->PINSEL3 = ((1<<8) | (1<<14));
+
+  //Configuration for USB host power pins
+  LPC_PINCON->PINSEL3 = (1<<7) | (1<<13) | (1<<23);
 
   //Enable EINT3 for Winkey CW
   //LPC_PINCON->PINSEL4 |= (1<<26);

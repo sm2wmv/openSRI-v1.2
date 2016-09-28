@@ -34,6 +34,8 @@
 #define SRI_CMD_SEND_STATUS_UPDATE      0x1A
 //! AUDIO settings changed
 #define SRI_CMD_AUDIO_SETTINGS_CHANGED  0x1B
+//! The sequencer settings changed
+#define SRI_CMD_SEQ_SETTINGS_CHANGED            0x1C
 
 
 
@@ -41,15 +43,18 @@
 #define SRI_CMD_CAT_SETTINGS_CHANGED    0x40
 
 //! Winkey characters being sent
-#define SRI_SUB_CMD_WINKEY_CHARS_SENT              0x01
+#define SRI_CMD_SUB_WINKEY_CHARS_SENT              0x01
 //! Winkey Settings changed
 #define SRI_CMD_SUB_WINKEY_SETTINGS_CHANGED        0x02
 
 //! CW Message sub command, set text str
-#define SRI_SUB_CMD_SET_CW_MESSAGE      0x01
+#define SRI_CMD_SUB_SET_CW_MESSAGE      0x01
 //! CW Message sub command, PLAY CW message
-#define SRI_SUB_CMD_PLAY_CW_MESSAGE     0x02
+#define SRI_CMD_SUB_PLAY_CW_MESSAGE     0x02
 //! CW Message sub command, PLAY CW message
-#define SRI_SUB_CMD_STOP_CW_MESSAGE     0x03
+#define SRI_CMD_SUB_STOP_CW_MESSAGE     0x03
+
+//! The radio delay has changed
+#define SRI_CMD_SUB_SEQ_RADIO_DELAY_CHANGED 0x01
 
 #endif

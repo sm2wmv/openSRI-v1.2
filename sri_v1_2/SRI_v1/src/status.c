@@ -232,7 +232,7 @@ uint8_t status_get_winkey_pot_speed() {
 void status_set_winkey_transmitted_character(uint8_t c) {
   if (computer_interface_connection_status()) {
     uint8_t data[2];
-    data[0] = SRI_SUB_CMD_WINKEY_CHARS_SENT;
+    data[0] = SRI_CMD_SUB_WINKEY_CHARS_SENT;
     data[1] = c;
 
     comm_interface_add_tx_message(SRI_CMD_WINKEY, 2, data);

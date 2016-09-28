@@ -1,4 +1,5 @@
 #include <cr_section_macros.h>
+#include <fw_version.h>
 #include <stdio.h>
 
 #include <string.h>
@@ -7,6 +8,7 @@
 #include "LPC17xx.h"
 #include "lpc17xx_i2c.h"
 #include "lpc17xx_uart.h"
+#include "USB.h"
 #include "main.h"
 #include "lpc_types.h"
 #include "init.h"
@@ -21,7 +23,6 @@
 #include "comm_interface.h"
 #include "computer_interface.h"
 #include "commands.h"
-#include "version.h"
 #include "misc.h"
 #include "event_queue.h"
 #include "eeprom_m24.h"
@@ -240,7 +241,11 @@ int main (void) {
 
   uint8_t prev_radio_state = 255;
 
+  USB_Init();
+
   while ( 1 ) {
+    keyboard_host_process();
+
     qei_temp = qei_get_counter_change();
 
     if (ctrl_get_radio_state() != prev_radio_state) {

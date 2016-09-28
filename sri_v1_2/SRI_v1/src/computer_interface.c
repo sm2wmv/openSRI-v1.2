@@ -5,7 +5,7 @@
 #include "computer_interface.h"
 #include "comm_interface.h"
 #include "commands.h"
-#include "version.h"
+#include "fw_version.h"
 #include "misc.h"
 #include "settings.h"
 #include "eeprom_m24.h"
@@ -78,6 +78,11 @@ void computer_interface_uart_rx(struct_comm_interface_msg message) {
     //Send status updates
     status_execute_update();
   }
+  else if (message.cmd == SRI_CMD_SEQ_SETTINGS_CHANGED) {
+    if (message.data[0] == SRI_CMD_SUB_SEQ_RADIO_DELAY_CHANGED) {
+      winkey_setting_changed(WINKEY_CMD_PTT_LEAD_TAIL);
+    }
+  }
   else if (message.cmd == SRI_CMD_CAT_SETTINGS_CHANGED) {
     cat_interface_init(settings_get_cat_baudrate(), settings_get_cat_stopbits(), settings_get_cat_parity(), settings_get_cat_flow_control(), settings_get_cat_jumper_cts_rts());
     status_execute_update();
@@ -113,17 +118,17 @@ void computer_interface_uart_rx(struct_comm_interface_msg message) {
     }
   }
   else if (message.cmd == SRI_CMD_CW_MESSAGE) {
-    if (message.data[0] == SRI_SUB_CMD_SET_CW_MESSAGE) {
+    if (message.data[0] == SRI_CMD_SUB_SET_CW_MESSAGE) {
       settings_set_cw_message(message.data[1], message.length-2,(uint8_t *)(message.data+2));
     }
-    else if (message.data[0] == SRI_SUB_CMD_PLAY_CW_MESSAGE) {
+    else if (message.data[0] == SRI_CMD_SUB_PLAY_CW_MESSAGE) {
       if (status_get_vfo_mode_type() == STATUS_RADIO_MODE_TYPE_CW) {
         PRINTF("WINKEY >> SENDING CW MSG %i\n",message.data[0]);
 
         winkey_send_message(strlen((char *)(settings_get_cw_message(message.data[1]))),settings_get_cw_message(message.data[1]));
       }
     }
-    else if (message.data[0] == SRI_SUB_CMD_STOP_CW_MESSAGE) {
+    else if (message.data[0] == SRI_CMD_SUB_STOP_CW_MESSAGE) {
       winkey_clear_buffer();
     }
   }
