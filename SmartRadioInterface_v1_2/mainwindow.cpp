@@ -1,9 +1,3 @@
-#include <QDebug>
-#include <QMessageBox>
-#include <QCloseEvent>
-#include <QColor>
-#include <QColorDialog>
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "version.h"
@@ -107,16 +101,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWin
   ui->lineEditEthernetSubnet->setValidator(ipValidator);
   ui->lineEditEthernetGateway->setValidator(ipValidator);
 
-  QWidget *listSegmentView = new QWidget;
+  listSegmentView = new QWidget;
   ui->scrollAreaBandDecoder->setWidget(listSegmentView);
-  QBoxLayout *segmentLayout = new QBoxLayout(QBoxLayout::TopToBottom, listSegmentView);
-
+  segmentLayout = new QBoxLayout(QBoxLayout::TopToBottom, listSegmentView);
   segmentLayout->addWidget(new FormBandDecoderTitle());
-  for (int i=0;i<listBandDecoderInput.length();i++) {
-    segmentLayout->addWidget(listBandDecoderInput.at(i), 0, 0);
-    listBandDecoderInput.at(i)->setIndex(i+1);
-  }
-
   segmentLayout->addStretch();
 }
 
@@ -549,10 +537,16 @@ void MainWindow::updateUIfromSettings() {
   updateBacklightColor(color);
 }
 
+void MainWindow::updateBandDecoder() {
+    for (int i=0;i<listBandDecoderInput.length();i++) {
+      segmentLayout->insertWidget(i,listBandDecoderInput.at(i), 0, 0);
+      listBandDecoderInput.at(i)->setIndex(i+1);
+    }
+}
+
 void MainWindow::msgBoxClosed(QAbstractButton* button) {
 
 }
-
 
 void MainWindow::showMessageBox(QString title, QString text, enum QMessageBox::Icon icon) {
    QMessageBox* msgBox = new QMessageBox(this);
@@ -1360,4 +1354,34 @@ void MainWindow::on_comboBoxDigitalFSKStopbits_currentIndexChanged(int index) {
 
 void MainWindow::on_comboBoxDigitalFSKParity_currentIndexChanged(int index) {
   settings->setDigitalFSKParity(index);
+}
+
+void MainWindow::on_pushButtonBandDecoderAddSegment_clicked() {
+    listBandDecoderInput.append(new FormBandDecoder());
+    FormBandDecoder *currDecoder = listBandDecoderInput.last();
+    connect(currDecoder, SIGNAL(deleteSegment(QWidget*)), this, SLOT(on_formBandDecoderDeleteSegment(QWidget*)));
+
+    segmentLayout->insertWidget(listBandDecoderInput.length(),listBandDecoderInput.last(), 0, 0);
+
+    if (listBandDecoderInput.length() > 1) {
+        currDecoder->setIndex(listBandDecoderInput.at(listBandDecoderInput.length()-2)->getIndex()+1);
+        currDecoder->setGroup(currDecoder->getIndex());
+    }
+    else {
+        currDecoder->setIndex(1);
+        currDecoder->setGroup(1);
+    }
+}
+
+void MainWindow::on_formBandDecoderDeleteSegment(QWidget *widget) {
+    segmentLayout->removeWidget(widget);
+
+    for (int i=0;i<listBandDecoderInput.count();i++)
+        if (listBandDecoderInput.at(i) == widget) {
+            listBandDecoderInput.removeAt(i);
+            break;
+        }
+    delete widget;
+
+    qDebug("DELETE");
 }

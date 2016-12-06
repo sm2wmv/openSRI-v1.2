@@ -2918,7 +2918,7 @@
           <x>10</x>
           <y>10</y>
           <width>641</width>
-          <height>431</height>
+          <height>421</height>
          </rect>
         </property>
         <property name="frameShape">
@@ -2939,10 +2939,52 @@
            <x>0</x>
            <y>0</y>
            <width>622</width>
-           <height>429</height>
+           <height>419</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_15"/>
+        </widget>
+       </widget>
+       <widget class="QFrame" name="frameBandDecoder">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>440</y>
+          <width>641</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Panel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <widget class="QPushButton" name="pushButtonBandDecoderAddSegment">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Add segment</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButtonBandDecoderApply">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>10</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Apply</string>
+         </property>
         </widget>
        </widget>
       </widget>
@@ -3271,7 +3313,7 @@
         <property name="title">
          <string> Ethernet </string>
         </property>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>10</x>

@@ -2,6 +2,7 @@
 #define FORMBANDDECODER_H
 
 #include <QWidget>
+#include <QDebug>
 
 namespace Ui {
 class FormBandDecoder;
@@ -19,6 +20,10 @@ public:
   void setGroup(int group);
   int getGroup();
 
+private slots:
+  void on_pushButtonDelete_clicked();
+signals:
+  void deleteSegment(QWidget *currWidget);
 private:
   Ui::FormBandDecoder *ui;
   int currentGroup;

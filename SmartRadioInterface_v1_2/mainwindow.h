@@ -5,6 +5,12 @@
 #include <QMessageBox>
 #include <QList>
 #include <QTimer>
+#include <QDebug>
+#include <QCloseEvent>
+#include <QColor>
+#include <QColorDialog>
+#include <QBoxLayout>
+
 #include "misc.h"
 #include "commclass.h"
 #include "dialogselectport.h"
@@ -43,6 +49,7 @@ public:
   void updateUIfromSettings();
   void updateUIfromStatus();
   void showMessageBox(QString title, QString text, enum QMessageBox::Icon icon);
+  void updateBandDecoder();
 private:
   Ui::MainWindow *ui;
   CommClass *serialPort;
@@ -57,6 +64,8 @@ private:
   DisplayClass display;
   quint8 rowCount;
   QList<FormBandDecoder *> listBandDecoderInput;
+  QWidget *listSegmentView;
+  QBoxLayout *segmentLayout;
 private slots:
   void actionPTTInputClicked();
   void actionPTTInputInvertClicked();
@@ -164,6 +173,8 @@ private slots:
   void on_comboBoxDigitalFSKBitLength_currentIndexChanged(int index);
   void on_comboBoxDigitalFSKStopbits_currentIndexChanged(int index);
   void on_comboBoxDigitalFSKParity_currentIndexChanged(int index);
+  void on_pushButtonBandDecoderAddSegment_clicked();
+  void on_formBandDecoderDeleteSegment(QWidget *widget);
 };
 
 #endif // MAINWINDOW_H

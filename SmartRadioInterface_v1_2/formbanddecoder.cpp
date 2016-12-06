@@ -17,6 +17,7 @@ FormBandDecoder::~FormBandDecoder()
 
 void FormBandDecoder::setIndex(int index) {
   currentIndex = index;
+  qDebug() << "index " << index << "blah" << this;
 
   ui->labelIndex->setText("#" + QString::number(index));
 }
@@ -33,4 +34,8 @@ void FormBandDecoder::setGroup(int group) {
 
 int FormBandDecoder::getGroup() {
   return(currentGroup);
+}
+
+void FormBandDecoder::on_pushButtonDelete_clicked() {
+    emit deleteSegment(this);
 }
