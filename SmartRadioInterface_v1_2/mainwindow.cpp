@@ -97,7 +97,27 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWin
   ui->comboBoxDisplayTextDigitalLine1TX->addItems(display.getStringListDigital());
   ui->comboBoxDisplayTextDigitalLine2TX->addItems(display.getStringListDigital());
 
+  QString ipRange = "(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])";
+  QRegExp ipRegex ("^" + ipRange
+                   + "\\." + ipRange
+                   + "\\." + ipRange
+                   + "\\." + ipRange + "$");
+  QRegExpValidator *ipValidator = new QRegExpValidator(ipRegex, this);
+  ui->lineEditEthernetIP->setValidator(ipValidator);
+  ui->lineEditEthernetSubnet->setValidator(ipValidator);
+  ui->lineEditEthernetGateway->setValidator(ipValidator);
 
+  QWidget *listSegmentView = new QWidget;
+  ui->scrollAreaBandDecoder->setWidget(listSegmentView);
+  QBoxLayout *segmentLayout = new QBoxLayout(QBoxLayout::TopToBottom, listSegmentView);
+
+  segmentLayout->addWidget(new FormBandDecoderTitle());
+  for (int i=0;i<listBandDecoderInput.length();i++) {
+    segmentLayout->addWidget(listBandDecoderInput.at(i), 0, 0);
+    listBandDecoderInput.at(i)->setIndex(i+1);
+  }
+
+  segmentLayout->addStretch();
 }
 
 void MainWindow::closeEvent (QCloseEvent *event) {

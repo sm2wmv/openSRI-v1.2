@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QList>
 #include <QTimer>
 #include "misc.h"
 #include "commclass.h"
@@ -11,6 +12,8 @@
 #include "settings.h"
 #include "status.h"
 #include "displayclass.h"
+#include "formbanddecoder.h"
+#include "formbanddecodertitle.h"
 
 //! The time between each poll of the USB port in ms
 #define TIMER_POLL_STATUS_INTERVAL  10
@@ -53,6 +56,7 @@ private:
   void updateBacklightColor(QColor color);
   DisplayClass display;
   quint8 rowCount;
+  QList<FormBandDecoder *> listBandDecoderInput;
 private slots:
   void actionPTTInputClicked();
   void actionPTTInputInvertClicked();

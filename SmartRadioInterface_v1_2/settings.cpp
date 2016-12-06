@@ -12,7 +12,7 @@
 
 #define UPDATE_CW_MESSAGE(index,str)  if (serialPort->isOpen()) {\
                                       QByteArray *txMessage = new QByteArray();\
-                                      txMessage->append(SRI_SUB_CMD_SET_CW_MESSAGE);\
+                                      txMessage->append(SRI_CMD_SUB_SET_CW_MESSAGE);\
                                       txMessage->append(index);\
                                       txMessage->append(str);\
                                       txMessage->append("\0");\

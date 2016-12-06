@@ -19,7 +19,9 @@ SOURCES += main.cpp\
         settings.cpp \
     misc.cpp \
     status.cpp \
-    displayclass.cpp
+    displayclass.cpp \
+    formbanddecoder.cpp \
+    formbanddecodertitle.cpp
 
 HEADERS  += mainwindow.h \
             version.h \
@@ -29,7 +31,11 @@ HEADERS  += mainwindow.h \
             settings.h \
     misc.h \
     status.h \
-    displayclass.h
+    displayclass.h \
+    formbanddecoder.h \
+    formbanddecodertitle.h
 
 FORMS    += mainwindow.ui \
-            dialogselectport.ui
+            dialogselectport.ui \
+    formbanddecoder.ui \
+    formbanddecodertitle.ui
