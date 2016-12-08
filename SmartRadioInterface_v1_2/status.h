@@ -8,7 +8,7 @@
 
 #include "commclass.h"
 #include "commands.h"
-#include "C:/Users/radio/Documents/openSRI-v1.2/sri_v1_2/SRI_v1/include/status.h"
+#include "C:/Users/micke/Documents/openSRI/sri_v1_2/SRI_v1/include/status.h"
 
 class Status {
 public:

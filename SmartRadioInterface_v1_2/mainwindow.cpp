@@ -1366,6 +1366,54 @@ void MainWindow::on_pushButtonBandDecoderAddSegment_clicked() {
     if (listBandDecoderInput.length() > 1) {
         currDecoder->setIndex(listBandDecoderInput.at(listBandDecoderInput.length()-2)->getIndex()+1);
         currDecoder->setGroup(currDecoder->getIndex());
+
+        switch (currDecoder->getIndex()) {
+          case 2:
+            currDecoder->setName("80m");
+            currDecoder->setFreqLow(3500);
+            currDecoder->setFreqHigh(3850);
+            break;
+        case 3:
+          currDecoder->setName("40m");
+          currDecoder->setFreqLow(7000);
+          currDecoder->setFreqHigh(7300);
+          break;
+        case 4:
+          currDecoder->setName("30m");
+          currDecoder->setFreqLow(10100);
+          currDecoder->setFreqHigh(10150);
+          break;
+        case 5:
+          currDecoder->setName("20m");
+          currDecoder->setFreqLow(14000);
+          currDecoder->setFreqHigh(14350);
+          break;
+        case 6:
+          currDecoder->setName("17m");
+          currDecoder->setFreqLow(18068);
+          currDecoder->setFreqHigh(18168);
+          break;
+        case 7:
+          currDecoder->setName("15m");
+          currDecoder->setFreqLow(21000);
+          currDecoder->setFreqHigh(21450);
+          break;
+        case 8:
+          currDecoder->setName("12m");
+          currDecoder->setFreqLow(24880);
+          currDecoder->setFreqHigh(24980);
+          break;
+        case 9:
+          currDecoder->setName("10m");
+          currDecoder->setFreqLow(28000);
+          currDecoder->setFreqHigh(29900);
+          break;
+        default:
+          currDecoder->setName("6m");
+          currDecoder->setFreqHigh(53000);
+          currDecoder->setFreqLow(50000);
+          break;
+        }
     }
     else {
         currDecoder->setIndex(1);
@@ -1376,12 +1424,12 @@ void MainWindow::on_pushButtonBandDecoderAddSegment_clicked() {
 void MainWindow::on_formBandDecoderDeleteSegment(QWidget *widget) {
     segmentLayout->removeWidget(widget);
 
-    for (int i=0;i<listBandDecoderInput.count();i++)
+    for (int i=0;i<listBandDecoderInput.count();i++) {
         if (listBandDecoderInput.at(i) == widget) {
             listBandDecoderInput.removeAt(i);
             break;
         }
-    delete widget;
+    }
 
-    qDebug("DELETE");
+    delete widget;
 }
