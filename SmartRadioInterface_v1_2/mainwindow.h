@@ -9,6 +9,7 @@
 #include <QCloseEvent>
 #include <QColor>
 #include <QColorDialog>
+#include <QScrollBar>
 #include <QBoxLayout>
 
 #include "misc.h"
@@ -175,6 +176,7 @@ private slots:
   void on_comboBoxDigitalFSKParity_currentIndexChanged(int index);
   void on_pushButtonBandDecoderAddSegment_clicked();
   void on_formBandDecoderDeleteSegment(QWidget *widget);
+  void on_bandDecoderScrollBarMoveToBottom(int min, int max);
 };
 
 #endif // MAINWINDOW_H

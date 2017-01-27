@@ -76,6 +76,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWin
   connect(ui->checkBoxDebugSystem, SIGNAL(clicked()), this, SLOT(checkBoxDebugClicked()));
   connect(ui->checkBoxDebugSequencer, SIGNAL(clicked()), this, SLOT(checkBoxDebugClicked()));
 
+  //This signal is used to move the scrollbar to the bottom when a new band segment is added
+  connect(ui->scrollAreaBandDecoder->verticalScrollBar(), SIGNAL(rangeChanged(int,int)), this, SLOT(on_bandDecoderScrollBarMoveToBottom(int, int)));
+
   ui->comboBoxDisplayTextCWLine1RX->addItems(display.getStringListCW());
   ui->comboBoxDisplayTextCWLine2RX->addItems(display.getStringListCW());
   ui->comboBoxDisplayTextCWLine1TX->addItems(display.getStringListCW());
@@ -1372,52 +1375,67 @@ void MainWindow::on_pushButtonBandDecoderAddSegment_clicked() {
             currDecoder->setName("80m");
             currDecoder->setFreqLow(3500);
             currDecoder->setFreqHigh(3850);
+            currDecoder->setOutputStatus((1<<(currDecoder->getIndex()-1)));
             break;
         case 3:
           currDecoder->setName("40m");
           currDecoder->setFreqLow(7000);
           currDecoder->setFreqHigh(7300);
+          currDecoder->setOutputStatus((1<<(currDecoder->getIndex()-1)));
           break;
         case 4:
           currDecoder->setName("30m");
           currDecoder->setFreqLow(10100);
           currDecoder->setFreqHigh(10150);
+          currDecoder->setOutputStatus((1<<(currDecoder->getIndex()-1)));
           break;
         case 5:
           currDecoder->setName("20m");
           currDecoder->setFreqLow(14000);
           currDecoder->setFreqHigh(14350);
+          currDecoder->setOutputStatus((1<<(currDecoder->getIndex()-1)));
           break;
         case 6:
           currDecoder->setName("17m");
           currDecoder->setFreqLow(18068);
           currDecoder->setFreqHigh(18168);
+          currDecoder->setOutputStatus((1<<(currDecoder->getIndex()-1)));
           break;
         case 7:
           currDecoder->setName("15m");
           currDecoder->setFreqLow(21000);
           currDecoder->setFreqHigh(21450);
+          currDecoder->setOutputStatus((1<<(currDecoder->getIndex()-1)));
           break;
         case 8:
           currDecoder->setName("12m");
           currDecoder->setFreqLow(24880);
           currDecoder->setFreqHigh(24980);
+          currDecoder->setOutputStatus((1<<(currDecoder->getIndex()-1)));
           break;
         case 9:
           currDecoder->setName("10m");
           currDecoder->setFreqLow(28000);
           currDecoder->setFreqHigh(29900);
+          currDecoder->setOutputStatus((1<<(currDecoder->getIndex()-1)));
           break;
         default:
           currDecoder->setName("6m");
           currDecoder->setFreqHigh(53000);
           currDecoder->setFreqLow(50000);
+          currDecoder->setOutputStatus((1<<9));
           break;
         }
     }
     else {
         currDecoder->setIndex(1);
         currDecoder->setGroup(1);
+
+        currDecoder->setName("160m");
+        currDecoder->setFreqLow(1800);
+        currDecoder->setFreqHigh(2000);
+        currDecoder->setOutputStatus((1<<0));
+
     }
 }
 
@@ -1432,4 +1450,10 @@ void MainWindow::on_formBandDecoderDeleteSegment(QWidget *widget) {
     }
 
     delete widget;
+}
+
+//This is used so that each time we add a new band segment the scrollbar is moved to the bottom
+void MainWindow::on_bandDecoderScrollBarMoveToBottom(int min, int max) {
+  Q_UNUSED(min);
+  ui->scrollAreaBandDecoder->verticalScrollBar()->setValue(max);
 }
