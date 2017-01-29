@@ -252,6 +252,7 @@
 			static inline void Pipe_ResetPipe(const uint8_t corenum, const uint8_t PipeNumber) ATTR_ALWAYS_INLINE;
 			static inline void Pipe_ResetPipe(const uint8_t corenum, const uint8_t PipeNumber)
 			{
+				(void)PipeNumber; //To supress warning
 				PipeInfo[corenum][pipeselected[corenum]].StartIdx = PipeInfo[corenum][pipeselected[corenum]].ByteTransfered = 0;
 			}
 
@@ -306,7 +307,7 @@
 			static inline void Pipe_SetPipeToken(const uint8_t Token) ATTR_DEPRECATED ATTR_ALWAYS_INLINE;
 			static inline void Pipe_SetPipeToken(const uint8_t Token)
 			{
-
+				(void)Token;//To supress warning
 			}
 
 			/** Configures the currently selected pipe to allow for an unlimited number of IN requests. */
@@ -324,7 +325,7 @@
 			static inline void Pipe_SetFiniteINRequests(const uint8_t TotalINRequests) ATTR_DEPRECATED ATTR_ALWAYS_INLINE;
 			static inline void Pipe_SetFiniteINRequests(const uint8_t TotalINRequests)
 			{
-
+				(void)TotalINRequests;//To supress warning
 			}
 
 			/** Determines if the currently selected pipe is configured.
@@ -355,6 +356,7 @@
 			static inline void Pipe_SetInterruptPeriod(const uint8_t Milliseconds) ATTR_ALWAYS_INLINE;
 			static inline void Pipe_SetInterruptPeriod(const uint8_t Milliseconds)
 			{
+				(void)Milliseconds;//To supress warning
 				//TODO implement later
 			}
 
@@ -379,6 +381,7 @@
 			static inline bool Pipe_HasPipeInterrupted(const uint8_t PipeNumber) ATTR_WARN_UNUSED_RESULT ATTR_ALWAYS_INLINE;
 			static inline bool Pipe_HasPipeInterrupted(const uint8_t PipeNumber)
 			{
+				(void)PipeNumber; //To supress warning
 				return false; // TODO implement later
 			}
 
@@ -899,6 +902,7 @@
 			static inline uint8_t Pipe_BytesToEPSizeMask(const uint16_t Bytes) ATTR_WARN_UNUSED_RESULT ATTR_CONST ATTR_ALWAYS_INLINE;
 			static inline uint8_t Pipe_BytesToEPSizeMask(const uint16_t Bytes)
 			{
+				(void)Bytes;//To supress warning
 				return 0; // implement later
 			}
 

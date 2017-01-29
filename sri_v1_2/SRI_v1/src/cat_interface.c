@@ -14,6 +14,7 @@
 #include "settings.h"
 #include "misc.h"
 #include "status.h"
+#include "ctrl.h"
 #include "main.h"
 
 //#define CAT_FREQ_DEBUG
@@ -173,6 +174,18 @@ void cat_interface_init(uint32_t baudrate, uint8_t stopbits, uint8_t parity, uin
 
     counter_cat_interface_poll_tick = 0;
     radio_rx_buffer_pos = 0;
+
+    if (cat_interface.jumper_cts_rts) {
+    	if (ctrl_radio_cat_cts_get())
+    		ctrl_radio_cat_rts_set();
+    	else
+    		ctrl_radio_cat_rts_clr();
+
+    	if (ctrl_computer_cat_rts_get())
+    		ctrl_computer_cat_cts_set();
+    	else
+    		ctrl_computer_cat_cts_clr();
+    }
   }
 }
 
@@ -181,6 +194,11 @@ void cat_interface_send_radio_request(void) {
     cat_interface_uart_radio_tx_buf(12,(uint8_t *)"IF;OI;FT;FR;");
 
     radio_rx_buffer_pos = 0;
+  }
+  else  if (cat_interface.radio_model == RADIO_MODEL_KENWOOD) {
+	  cat_interface_uart_radio_tx_buf(9,(uint8_t *)"FA;FB;IF;");
+
+	  radio_rx_buffer_pos = 0;
   }
 }
 
@@ -192,7 +210,7 @@ uint8_t cat_interface_parse_cmd(uint8_t *buffer, uint8_t length) {
 
     if (cat_interface.radio_model == RADIO_MODEL_YAESU_FT950) {
       if (length == 26) {
-        if (strncmp((char *)buffer,(char *)"IF",2) == 0) {
+        if (strncmp((char *)buffer,(char *)"FA",2) == 0) {
           uint32_t freq_vfoA = 0;
 
           freq_vfoA =  (buffer[5]-48)  * 10000000;
@@ -213,7 +231,7 @@ uint8_t cat_interface_parse_cmd(uint8_t *buffer, uint8_t length) {
 
           return(1);
         }
-        else if (strncmp((char *)buffer,(char *)"OI",2) == 0) {
+        else if (strncmp((char *)buffer,(char *)"FB",2) == 0) {
           uint32_t freq_vfoB = 0;
 
           freq_vfoB =  (buffer[5]-48)  * 10000000;
@@ -267,7 +285,90 @@ uint8_t cat_interface_parse_cmd(uint8_t *buffer, uint8_t length) {
         }
       }
     }
-  }
+    else if (cat_interface.radio_model == RADIO_MODEL_KENWOOD) {
+        PRINTF("LEN: %i\n", length);
+    	if (length == 13) {
+          if (strncmp((char *)buffer,(char *)"FA",2) == 0) {
+            uint32_t freq_vfoA = 0;
+
+            freq_vfoA =  (buffer[2]-48)  * 10000000000;
+            freq_vfoA =  (buffer[3]-48)  * 1000000000;
+            freq_vfoA += (buffer[4]-48)  * 100000000;
+            freq_vfoA += (buffer[5]-48)  * 10000000;
+            freq_vfoA += (buffer[6]-48)  * 1000000;
+            freq_vfoA += (buffer[7]-48)  * 100000;
+            freq_vfoA += (buffer[8]-48)  * 10000;
+            freq_vfoA += (buffer[9]-48)  * 1000;
+            freq_vfoA += (buffer[10]-48) * 100;
+            freq_vfoA += (buffer[11]-48) * 10;
+            freq_vfoA += (buffer[12]-48);
+
+            PRINTF_CAT("CAT: FREQ VFO A=%i\n",freq_vfoA);
+
+            status_set_vfoA_freq(freq_vfoA);
+
+            return(1);
+          }
+          else if (strncmp((char *)buffer,(char *)"FB",2) == 0) {
+            uint32_t freq_vfoB = 0;
+
+            freq_vfoB =  (buffer[2]-48)  * 10000000000;
+            freq_vfoB =  (buffer[3]-48)  * 1000000000;
+            freq_vfoB += (buffer[4]-48)  * 100000000;
+            freq_vfoB += (buffer[5]-48)  * 10000000;
+            freq_vfoB += (buffer[6]-48)  * 1000000;
+            freq_vfoB += (buffer[7]-48)  * 100000;
+            freq_vfoB += (buffer[8]-48)  * 10000;
+            freq_vfoB += (buffer[9]-48)  * 1000;
+            freq_vfoB += (buffer[10]-48) * 100;
+            freq_vfoB += (buffer[11]-48) * 10;
+            freq_vfoB += (buffer[12]-48);
+
+            PRINTF_CAT("CAT: FREQ VFO B=%i\n",freq_vfoB);
+
+            status_set_vfoB_freq(freq_vfoB);
+            return(1);
+          }
+        }
+    	else if (strncmp((char *)buffer,(char *)"IF",2) == 0) {
+			if ((buffer[30]-48) == 0) {	//VFO A
+			  if (((buffer[29]-48) > 10) || ((buffer[29]-48) == 8))
+				  status_set_vfoA_mode(STATUS_RADIO_MODE_UNKNOWN);
+			  else
+				  status_set_vfoA_mode((buffer[29]-48));
+			}
+			else if ((buffer[30]-48) == 1) {	//VFO B
+			  if (((buffer[29]-48) > 10) || ((buffer[29]-48) == 8))
+				  status_set_vfoB_mode(STATUS_RADIO_MODE_UNKNOWN);
+			  else
+				  status_set_vfoB_mode((buffer[29]-48));
+			}
+
+			uint8_t txrx_state = 0;
+
+			if ((buffer[32]-48) == 0) {
+				if ((buffer[30]-48) == 0) {
+					txrx_state = (1<<STATUS_VFO_TXRX_VFOA_TX) | (1<<STATUS_VFO_TXRX_VFOA_RX);
+					status_set_vfoAB_txrx_state(txrx_state);
+				}
+				else if ((buffer[30]-48) == 1) {
+					txrx_state = (1<<STATUS_VFO_TXRX_VFOB_TX) | (1<<STATUS_VFO_TXRX_VFOB_RX);
+					status_set_vfoAB_txrx_state(txrx_state);
+				}
+			}
+			else if ((buffer[32]-48) == 1) {
+				if ((buffer[30]-48) == 0) {
+					txrx_state = (1<<STATUS_VFO_TXRX_VFOA_TX) | (1<<STATUS_VFO_TXRX_VFOB_RX);
+					status_set_vfoAB_txrx_state(txrx_state);
+				}
+				else if ((buffer[30]-48) == 1) {
+					txrx_state = (1<<STATUS_VFO_TXRX_VFOB_TX) | (1<<STATUS_VFO_TXRX_VFOA_RX);
+					status_set_vfoAB_txrx_state(txrx_state);
+				}
+			}
+          }
+        }
+      }
 
   return(0);
 }
@@ -291,6 +392,23 @@ uint8_t cat_interface_parse_buffer(uint8_t *buffer, uint8_t length) {
         return(1);
       }
     }
+    else if (cat_interface.radio_model == RADIO_MODEL_KENWOOD) {
+        //Check for a ; character
+        if (buffer[length-1] == ';') {
+          cat_interface_parse_cmd(buffer,length-1);
+
+          #ifdef CAT_DATA_DEBUG
+            PRINTF("CAT DATA: BUFFER >> ");
+            for (uint8_t i=0;i<length;i++) {
+              PRINTF("%c",buffer[i]);
+            }
+            PRINTF("\n");
+          #endif
+
+          radio_rx_buffer_pos = 0;
+          return(1);
+        }
+      }
   }
 
   return(0);
@@ -392,6 +510,18 @@ void cat_interface_1ms_tick(void) {
     if (cat_radio_rx_buffer_timeout > CAT_INTERFACE_RADIO_RX_CHAR_TIMEOUT) {
       radio_rx_buffer_pos = 0;
       cat_radio_rx_buffer_timeout = 0;
+    }
+
+    if (cat_interface.jumper_cts_rts) {
+    	if (ctrl_radio_cat_cts_get())
+    		ctrl_radio_cat_rts_set();
+    	else
+    		ctrl_radio_cat_rts_clr();
+
+    	if (ctrl_computer_cat_rts_get())
+    		ctrl_computer_cat_cts_set();
+    	else
+    		ctrl_computer_cat_cts_clr();
     }
 
     cat_radio_rx_buffer_timeout++;

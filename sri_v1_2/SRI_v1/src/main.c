@@ -31,6 +31,7 @@
 #include "sc16is7x0.h"
 #include "winkey.h"
 #include "display.h"
+#include "keyboard_host.h"
 
 volatile uint32_t timer0_counter = 0;
 volatile uint32_t timer1_counter = 0;
@@ -189,7 +190,7 @@ int main (void) {
 
   delay_ms(100);
 
-  init_qei();
+  qei_init_hw();
 
   lcd_init();
 
@@ -214,7 +215,6 @@ int main (void) {
     cat_interface_init(settings_get_cat_baudrate(), settings_get_cat_stopbits(), settings_get_cat_parity(), settings_get_cat_flow_control(), settings_get_cat_jumper_cts_rts());
   #endif
 
-
   ctrl_backlight_init(settings_get_backlight_rgb_red(), settings_get_backlight_rgb_green(), settings_get_backlight_rgb_blue());
 
   sc16is7x0_init_winkey();
@@ -227,6 +227,7 @@ int main (void) {
 
   delay_ms(100);
   winkey_init();
+  delay_ms(100);
   winkey_reset();
 
   display_welcome_screen();
@@ -239,12 +240,12 @@ int main (void) {
 
   display_update();
 
-  uint8_t prev_radio_state = 255;
+  uint8_t prev_radio_state = 254;
 
   USB_Init();
 
   while ( 1 ) {
-    keyboard_host_process();
+   keyboard_host_process();
 
     qei_temp = qei_get_counter_change();
 
@@ -258,10 +259,12 @@ int main (void) {
     }
 
     if (qei_temp != 0) {
-      if (qei_temp > 0)
-        winkey_inc_speed();
-      else
-        winkey_dec_speed();
+      if (qei_temp > 0) {
+    	  winkey_inc_speed();
+      }
+      else {
+    	  winkey_dec_speed();
+      }
     }
 
     comm_interface_parse_rx_buffer();

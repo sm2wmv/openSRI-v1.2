@@ -1,7 +1,7 @@
 #ifndef __QEI_H
 #define __QEI_H
 
-void init_qei(void);
+void qei_init_hw(void);
 
 int16_t qei_get_counter_pos(void);
 void qei_reset_counter_pos(void);

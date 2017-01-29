@@ -79,7 +79,7 @@ void event_handler_ptt_radio_activate(void) {
 void event_handler_ptt_radio_deactivate(void) {
   PRINTF("EVENT_HANDLER: RADIO PTT DEACTIVE\n");
 
-  if (status_get_vfo_mode_type() == STATUS_RADIO_MODE_TYPE_CW) {
+/*  if (status_get_vfo_mode_type() == STATUS_RADIO_MODE_TYPE_CW) {
     if ((settings_get_radio_cw_ptt() == SETTINGS_PTT_RADIO_OUTPUT_1) || (settings_get_radio_cw_ptt() == SETTINGS_PTT_RADIO_OUTPUT_1_2)) {
       ctrl_radio_ptt_1_clr();
     }
@@ -120,7 +120,11 @@ void event_handler_ptt_radio_deactivate(void) {
       ctrl_radio_ptt_1_clr(); //Make sure the output is off
       ctrl_radio_ptt_2_clr(); //Make sure the output is off
     }
-  }
+  }*/
+
+  //I don't see where we wish to have one PTT on during a PTT deactive
+  ctrl_radio_ptt_1_clr(); //Make sure the output is off
+  ctrl_radio_ptt_2_clr(); //Make sure the output is off
 }
 
 void event_handler_ptt_amp_activate(void) {

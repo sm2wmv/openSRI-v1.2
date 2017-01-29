@@ -82,6 +82,14 @@ void ctrl_radio_ptt_2_clr(void);
 void ctrl_radio_inhibit_set(void);
 void ctrl_radio_inhibit_clr(void);
 
+void ctrl_radio_cat_rts_set(void);
+void ctrl_radio_cat_rts_clr(void);
+uint8_t ctrl_radio_cat_cts_get(void);
+
+uint8_t ctrl_computer_cat_rts_get(void);
+void ctrl_computer_cat_cts_set(void);
+void ctrl_computer_cat_cts_clr(void);
+
 void ctrl_ant_set(void);
 void ctrl_ant_clr(void);
 

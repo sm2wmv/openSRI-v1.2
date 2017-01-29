@@ -123,10 +123,10 @@ void init_io(void) {
 
   //configuration for the pins QEI
   //PH A&B & index
-  LPC_PINCON->PINSEL3 = ((1<<8) | (1<<14));
+  LPC_PINCON->PINSEL3 |= ((1<<8) | (1<<14));
 
   //Configuration for USB host power pins
-  LPC_PINCON->PINSEL3 = (1<<7) | (1<<13) | (1<<23);
+  LPC_PINCON->PINSEL3 |= (1<<7) | (1<<13) | (1<<23);
 
   //Enable EINT3 for Winkey CW
   //LPC_PINCON->PINSEL4 |= (1<<26);

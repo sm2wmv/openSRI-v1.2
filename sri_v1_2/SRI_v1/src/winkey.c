@@ -19,9 +19,6 @@ static volatile uint8_t counter_last_rx_char = 0;
 
 static volatile uint8_t winkey_state = 0;
 
-static uint8_t winkey_rx_buffer[WINKEY_RX_BUF_SIZE];
-static uint8_t winkey_tx_buffer[WINKEY_TX_BUF_SIZE];
-
 uint8_t winkey_computer_rx_buffer[WINKEY_RX_BUF_SIZE];
 uint8_t winkey_computer_tx_buffer[WINKEY_TX_BUF_SIZE];
 

@@ -338,6 +338,8 @@ PRAGMA_ALWAYS_INLINE
 			static inline void SetGlobalInterruptMask(const uint_reg_t GlobalIntState) ATTR_ALWAYS_INLINE;
 			static inline void SetGlobalInterruptMask(const uint_reg_t GlobalIntState)
 			{
+				(void)GlobalIntState;
+
 				GCC_MEMORY_BARRIER();
 
 				#if (ARCH == ARCH_AVR8)

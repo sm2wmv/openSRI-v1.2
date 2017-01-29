@@ -3,11 +3,12 @@
 #include "lpc17xx.h"
 #include "qei.h"
 #include "lcd.h"
+#include "misc.h"
 
 static int16_t qei_counter = 0;
 static int16_t qei_counter_prev_pos = 0;
 
-void init_qei(void) {
+void qei_init_hw(void) {
   //Basic Configuration:
   LPC_SC->PCONP |= (1<<18);
   LPC_SC->PCLKSEL1  |= (0x01);
@@ -28,6 +29,8 @@ void QEI_IRQHandler(void){
     qei_counter--;
   else
     qei_counter++;
+
+  PRINTF("QEI INT\n");
 
   LPC_QEI->QEICLR = 0xFFFFFFFF;   // clear all interrupts
 }

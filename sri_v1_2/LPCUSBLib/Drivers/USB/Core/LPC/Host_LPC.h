@@ -322,7 +322,7 @@
 			static inline void USB_Host_SetDeviceAddress(const uint8_t Address) ATTR_ALWAYS_INLINE;
 			static inline void USB_Host_SetDeviceAddress(const uint8_t Address)
 			{
-
+				(void)Address;	//To supress warning
 			}
 
 		/* Enums: */

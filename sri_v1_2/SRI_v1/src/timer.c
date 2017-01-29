@@ -226,6 +226,8 @@ uint32_t init_timer ( uint8_t timer_num, uint32_t timer_interval )
 {
   uint32_t pclkdiv, pclk;
 
+  (void)timer_interval; //To supress warning
+
   if ( timer_num == 0 ) {
     timer0_m0_counter = 0;
     timer0_m1_counter = 0;

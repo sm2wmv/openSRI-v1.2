@@ -273,6 +273,30 @@ uint8_t ctrl_i2c_io_exp_a8_set(void) {
   return(I2C_MasterTransferData(LPC_I2C0, &transferMCfg, I2C_TRANSFER_POLLING));
 }
 
+void ctrl_radio_cat_rts_set(void) {
+	LPC1765_CAT_RTS_PORT->FIOSET = (1<<LPC1765_CAT_RTS);
+}
+
+void ctrl_radio_cat_rts_clr(void) {
+	LPC1765_CAT_RTS_PORT->FIOCLR = (1<<LPC1765_CAT_RTS);
+}
+
+uint8_t ctrl_radio_cat_cts_get(void) {
+	return(LPC1765_CAT_CTS_PORT->FIOPIN & (1<<LPC1765_CAT_CTS));
+}
+
+uint8_t ctrl_computer_cat_rts_get(void) {
+	return(FT4232_CAT_RTS_PORT->FIOPIN & (1<<FT4232_CAT_RTS));
+}
+
+void ctrl_computer_cat_cts_set(void) {
+	FT4232_CAT_CTS_PORT->FIOSET = (1<<FT4232_CAT_CTS);
+}
+
+void ctrl_computer_cat_cts_clr(void) {
+	FT4232_CAT_CTS_PORT->FIOCLR = (1<<FT4232_CAT_CTS);
+}
+
 void ctrl_fsk_tx_enable_set(void) {
   io_exp_a1_out_status |= (1<<7);
   ctrl_i2c_io_exp_a1_set();
@@ -287,6 +311,7 @@ void ctrl_ptt_amp_set(void) {
   #ifdef CTRL_DEBUG
     PRINTF("CTRL: PTT AMP SET\n");
   #endif
+
     PTT_AMP_PORT->FIOSET = (1<<PTT_AMP);
 }
 
