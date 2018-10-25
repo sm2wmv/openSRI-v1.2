@@ -757,7 +757,7 @@ void MainWindow::on_actionDisconnect_triggered() {
   if (serialPort->isOpen()) {
     serialPort->addTXMessage(SRI_CMD_DISCONNECT);
 
-    //Wait two seconds before we disconnect the serial port, so that
+    //Wait one second before we disconnect the serial port, so that
     //the message has time to be sent to the uC
     QTimer::singleShot(1000, this, SLOT(disconnectSerialPort()));
   }
@@ -779,7 +779,7 @@ if (resBtn != QMessageBox::Yes) {
 
   } else {
     on_actionDisconnect_triggered();
-    QTimer::singleShot(1000, this, SLOT(killTheProgram()));
+    QTimer::singleShot(1500, this, SLOT(killTheProgram()));
   }
 }
 
